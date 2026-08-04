@@ -3,26 +3,33 @@
  *
  *   pnpm run icons
  *
- * Le dessin : une tuile de papier crème, une fleur de cerisier en rose cendré,
- * un filet vermillon en pied. C'est le seul monogramme que ce site puisse
- * porter honnêtement — le cerisier EST la direction artistique, et une
- * initiale « I » dans 16 px serait une barre verticale indistinguable.
+ * Le dessin : une tuile de papier crème, l'initiale d'Itokiana en encre, un
+ * filet vermillon en pied. Les trois couleurs sont celles du thème clair, et
+ * la lettre est composée dans la police de titre du site — le favicon est donc
+ * un fragment de la page, pas un logo posé à côté.
  *
- * Contrairement au jeu d'icônes de Lionel, aucune police n'entre ici : la
- * fleur est un tracé. Ça supprime le problème qui l'obligeait à dessiner sa
- * tuile en HTML — une `@font-face` déclarée dans le document hôte ne traverse
- * pas un SVG chargé en `data:` URI, et sa lettre y retombait sur une police de
- * substitution. La tuile passe quand même par Chromium via Playwright, déjà
- * présent pour les tests : aucune dépendance de rendu d'image n'est ajoutée.
+ * POURQUOI UNE LETTRE, alors que la première version portait une fleur.
+ * L'objection tenait : dans 16 px, un « I » est une barre verticale, et rien
+ * ne la distingue d'un filet. Elle tombe avec Zen Old Mincho. C'est un mincho,
+ * donc un caractère à empattements : son « I » capital porte deux fortes
+ * barres horizontales, en tête et en pied. La silhouette obtenue est un H
+ * couché, large et refermé — reconnaissable là où un « I » de grotesque ne
+ * l'est pas. Vérifié au rendu, pas déduit.
  *
- * La géométrie est EXACTEMENT celle de Sprite.astro : mêmes angles inégaux
- * (70°/76°/68°/74°/72°), mêmes échelles à 3 % près, même bascule de −8° du
- * groupe. Premier essai fait avec cinq pétales réguliers à 72°, au motif que
- * l'asymétrie ne se verrait pas à 16 px : à 180 px, l'icône iOS rendait une
- * rosace de horloger, pas une fleur. C'est précisément cette irrégularité qui
- * fait lire un cerisier plutôt qu'un engrenage, et elle ne coûte rien.
+ * Le cerisier ne disparaît pas pour autant : il reste dans le papier crème,
+ * dans le filet vermillon du sceau, et dans le dessin même de la lettre.
+ *
+ * LA CONTRAINTE TECHNIQUE, héritée du jeu d'icônes de Lionel : une
+ * `@font-face` déclarée dans le document hôte ne traverse pas un SVG chargé en
+ * `data:` URI — la lettre y retombe sur une police de substitution. La tuile
+ * est donc dessinée en HTML, où la police est réellement appliquée, et
+ * Chromium rasterise via Playwright, déjà présent pour les tests. Aucune
+ * dépendance de rendu d'image n'est ajoutée au projet.
+ *
+ * La police est embarquée en base64 dans la page : le sous-ensemble latin
+ * contient « I », et c'est le même fichier que sert le site.
  */
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from '@playwright/test';
@@ -35,51 +42,45 @@ const PUBLIC = join(ROOT, 'public');
    est ce qui le détache aussi bien sur un onglet clair que sur un onglet
    sombre. Une tuile encre disparaîtrait dans un onglet sombre. */
 const PAPER = '#faf5ec';
-const PETAL = '#c08894';
+const INK = '#23201e';
 const SHU = '#c9432e';
 
+/**
+ * `lettre` : hauteur de la police en fraction du côté. `filet` : hauteur du
+ * filet en pied.
+ *
+ * La lettre grossit dans les petites tailles : à 16 px, chaque pixel de
+ * hampe compte, et les empattements doivent rester au moins à un pixel plein
+ * pour que la silhouette tienne. À 180 px, elle respire au contraire.
+ *
+ * Pas d'icône 192, 512 ni maskable : ce site n'a pas de manifeste, donc rien
+ * ne les référencerait. Le jour où il en gagne un, les ajouter ici ; la
+ * maskable devra rétrécir sa lettre aux 80 % centraux (zone sûre d'Android)
+ * tout en gardant la tuile à fond perdu.
+ */
 const TARGETS = [
-  { file: 'favicon-16.png', size: 16, fleur: 0.78, filet: 0.16 },
-  { file: 'favicon-32.png', size: 32, fleur: 0.78, filet: 0.16 },
-  { file: 'favicon-48.png', size: 48, fleur: 0.78, filet: 0.16 },
-  // iOS arrondit les coins : la fleur s'écarte un peu plus des bords.
-  { file: 'apple-touch-icon.png', size: 180, fleur: 0.66, filet: 0.13 },
+  { file: 'favicon-16.png', size: 16, lettre: 0.86, filet: 0.16 },
+  { file: 'favicon-32.png', size: 32, lettre: 0.82, filet: 0.16 },
+  { file: 'favicon-48.png', size: 48, lettre: 0.8, filet: 0.16 },
+  // iOS arrondit les coins : la lettre s'écarte un peu plus des bords.
+  { file: 'apple-touch-icon.png', size: 180, lettre: 0.7, filet: 0.13 },
 ];
 
 /** Le .ico embarque trois PNG : licite depuis Vista, lu par tous les navigateurs. */
 const ICO_SIZES = [16, 32, 48];
 
-const PETALE =
-  'M0 1.1 C-2.7-1.3 -5.5-4.4 -5.6-8.1 C-5.7-11.1 -3.9-13.1 -1.9-12.8 ' +
-  'C-1-12.6 -.35-11.6 0-9.5 C.35-11.6 1-12.6 1.9-12.8 C3.9-13.1 5.7-11.1 5.6-8.1 ' +
-  'C5.5-4.4 2.7-1.3 0 1.1 Z';
-
-/* Les cinq pétales, avec leurs angles et leurs échelles inégaux : la copie
-   conforme de Sprite.astro. Une fleur vraie n'est pas symétrique, et l'œil lit
-   la symétrie parfaite comme du gabarit. */
-const POSES = [
-  '',
-  'rotate(70) scale(.97,1.03)',
-  'rotate(146) scale(1.03,.98)',
-  'rotate(214) scale(.98,1.01)',
-  'rotate(288) scale(1.02,.99)',
-];
-
-const fleurSvg = (px) =>
-  `<svg width="${px}" height="${px}" viewBox="-14 -14 28 28" xmlns="http://www.w3.org/2000/svg">` +
-  `<g fill="${PETAL}" transform="rotate(-8) scale(1,.96)">` +
-  POSES.map((p) => `<path d="${PETALE}"${p ? ` transform="${p}"` : ''}/>`).join('') +
-  '</g></svg>';
-
-function page({ size, fleur, filet }) {
+function page(font, { size, lettre, filet }) {
   return `<!doctype html><meta charset="utf-8"><style>
+    @font-face{font-family:Mincho;src:url(data:font/woff2;base64,${font}) format('woff2');font-weight:900}
     html,body{margin:0;padding:0;width:${size}px;height:${size}px}
     .tuile{position:relative;width:${size}px;height:${size}px;background:${PAPER};overflow:hidden}
-    .f{position:absolute;inset:0;display:grid;place-items:center;
-       /* Remontée optique : le filet pèse en bas, la fleur doit s'en écarter. */
-       padding-bottom:${(filet * 1.6 * 100).toFixed(2)}%}
+    .l{position:absolute;inset:0;display:grid;place-items:center;
+       /* Remontée optique : le filet pèse en bas, la lettre doit s'en écarter. */
+       padding-bottom:${(filet * 1.6 * 100).toFixed(2)}%;
+       font-family:Mincho;font-weight:900;font-size:${(lettre * size).toFixed(2)}px;
+       line-height:1;color:${INK}}
     .filet{position:absolute;left:0;right:0;bottom:0;height:${(filet * 100).toFixed(2)}%;background:${SHU}}
-  </style><div class="tuile"><div class="f">${fleurSvg((fleur * size).toFixed(2))}</div><div class="filet"></div></div>`;
+  </style><div class="tuile"><div class="l">I</div><div class="filet"></div></div>`;
 }
 
 function ico(entries) {
@@ -103,7 +104,20 @@ function ico(entries) {
   return Buffer.concat([head, ...dir, ...entries.map((e) => e.png)]);
 }
 
-const browser = await chromium.launch();
+const font = (await readFile(join(PUBLIC, 'fonts', 'ZenOldMincho-900.woff2'))).toString('base64');
+
+/* `--disable-lcd-text` : sans lui, Chromium rend la lettre en crénelage
+   SOUS-PIXEL et dépose des franges orange et bleues le long des jambages —
+   visibles à l'œil nu dès qu'on agrandit un favicon de 16 px. Ces franges ne
+   sont justes que sur une dalle RVB dans cet ordre précis ; partout ailleurs,
+   et à toute autre échelle, elles ressortent comme de la couleur parasite dans
+   une icône qui n'en a que trois. Le lissage en niveaux de gris est le seul
+   correct pour une image qu'on ne contrôle pas.
+   `--force-color-profile=srgb` fige le profil, sinon les trois couleurs
+   dérivent selon l'écran de la machine qui lance le script. */
+const browser = await chromium.launch({
+  args: ['--disable-lcd-text', '--force-color-profile=srgb'],
+});
 const rendered = new Map();
 
 for (const target of TARGETS) {
@@ -111,7 +125,12 @@ for (const target of TARGETS) {
     viewport: { width: target.size, height: target.size },
     deviceScaleFactor: 1,
   });
-  await p.setContent(page(target));
+  await p.setContent(page(font, target));
+  /* Attendre le chargement réel de la police, et pas seulement `fonts.ready` :
+     sans cette garantie, Chromium rasterise parfois la lettre dans la police
+     de substitution, et l'icône part avec un « I » de grotesque — c'est
+     exactement le défaut que ce script existe pour éviter. */
+  await p.evaluate(() => document.fonts.load('900 100px Mincho').then(() => document.fonts.ready));
   const png = await p.screenshot();
   await p.close();
   await writeFile(join(PUBLIC, target.file), png);

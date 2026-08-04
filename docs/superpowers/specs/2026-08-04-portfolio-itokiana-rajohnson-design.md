@@ -183,6 +183,25 @@ titre d'un côté, pastille et chapeau de l'autre. L'état s'appelle désormais
 `.shown`. Aucun test ne l'avait vu : c'est une vérification visuelle qui l'a
 trouvé.
 
+### Le favicon
+
+Tuile de papier crème, **l'initiale d'Itokiana en encre**, filet vermillon en
+pied — les trois couleurs du thème clair, et la lettre composée dans Zen Old
+Mincho, la police de titre du site. Le favicon est un fragment de la page, pas
+un logo posé à côté.
+
+La première version portait une fleur, au motif qu'un « I » dans 16 px serait
+une barre verticale indistinguable. L'objection ne tenait que pour un
+grotesque : en mincho, le « I » capital porte deux fortes barres horizontales
+en tête et en pied, et la silhouette obtenue est large et refermée. Vérifié au
+rendu à 16, 32 et 48 px, pas déduit.
+
+Deux drapeaux Chromium sont indispensables au rendu (`scripts/icons.mjs`) :
+`--disable-lcd-text`, sans quoi le crénelage sous-pixel dépose des franges
+orange et bleues le long des jambages — justes sur une dalle RVB dans cet
+ordre, parasites partout ailleurs ; et `--force-color-profile=srgb`, sans quoi
+les trois couleurs dérivent selon l'écran de la machine qui lance le script.
+
 ## 7. Accessibilité
 
 | Exigence | Niveau |
