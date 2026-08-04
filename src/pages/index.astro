@@ -1,0 +1,31 @@
+---
+import AuthorityBand from '../components/AuthorityBand.astro';
+import Branch from '../components/Branch.astro';
+import Contact from '../components/Contact.astro';
+import Delivered from '../components/Delivered.astro';
+import Hero from '../components/Hero.astro';
+import Timeline from '../components/Timeline.astro';
+import Who from '../components/Who.astro';
+import Work from '../components/Work.astro';
+import Base from '../layouts/Base.astro';
+import { t, type Lang } from '../i18n/utils';
+
+/* La page anglaise n'existe pas en tant que fichier : la configuration i18n
+   d'Astro (fallbackType « rewrite ») sert cette même page sous /en/ avec
+   `Astro.currentLocale` à « en ». Un miroir src/pages/en/index.astro serait
+   une copie qui diverge à la première modification. */
+const lang = (Astro.currentLocale ?? 'fr') as Lang;
+const s = t(lang);
+---
+
+<Base title={s.meta.title} description={s.meta.description}>
+  <Hero lang={lang} />
+  <Branch />
+  <AuthorityBand lang={lang} />
+  <Who lang={lang} />
+  <Work lang={lang} />
+  <Branch />
+  <Delivered lang={lang} />
+  <Timeline lang={lang} />
+  <Contact lang={lang} />
+</Base>

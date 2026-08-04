@@ -1,0 +1,55 @@
+---
+import { t, type Lang } from '../i18n/utils';
+
+const { lang } = Astro.props as { lang: Lang };
+const s = t(lang);
+---
+
+<section class="blk wrap" id="livre">
+  <div class="sec-head rv">
+    <span class="bl" aria-hidden="true"><svg><use href="#s-bl"></use></svg></span>
+    <span class="n">{s.delivered.n}</span><h2>{s.delivered.heading}</h2>
+  </div>
+
+  <div class="real">
+    {
+      s.delivered.items.map((item) => (
+        <article class="rl rv" style={`--c:var(--${item.role});--ct:var(--${item.role}-t)`}>
+          <div class="meta">
+            <span class="mono">{item.client}</span>
+            <span class="mono dim">{item.place}</span>
+            <span class="mono dim">{item.period}</span>
+          </div>
+          <div>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+            <div class="facts">
+              {item.facts.map((fact) => (
+                <span>{fact}</span>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  {/* Ketrika, Vidy Varotra et Kotikota n'affichent AUCUNE pile technique : le
+      CV maître n'en donne pas, et en déduire une depuis la liste de
+      compétences serait exactement le genre de fait fabriqué que les règles de
+      contenu interdisent. La cellule reste vide plutôt que devinée. */}
+  <div class="projs rv">
+    <span class="mono">{s.delivered.alsoLabel}</span>
+    <div class="pgrid">
+      {
+        s.delivered.also.map((proj) => (
+          <article>
+            <h4>{proj.title}</h4>
+            <p>{proj.body}</p>
+            <span class="st">{proj.stack}</span>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

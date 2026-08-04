@@ -1,0 +1,90 @@
+---
+import { t, type Lang } from '../i18n/utils';
+
+const { lang } = Astro.props as { lang: Lang };
+const s = t(lang);
+
+const NEXTRI = 'https://nextrimg.github.io/nextri_portfolio/';
+
+/* L'adresse est écrite en entités numériques : elle se lit et se copie
+   exactement comme du texte, y compris sans JavaScript, mais elle n'apparaît
+   pas telle quelle dans la source servie. Ça n'arrête pas un moissonneur
+   déterminé — rien ne l'arrête — et ça écarte les plus paresseux, qui sont la
+   majorité. Un e-mail joignable reste le but du site : c'est un compromis
+   assumé, pas une protection. */
+const EMAIL = 'rajohnsonitokiana@gmail.com';
+const entities = (v: string) => [...v].map((c) => `&#${c.codePointAt(0)};`).join('');
+
+/* Le numéro, lui, n'est JAMAIS dans le HTML servi, sous aucune forme lisible :
+   un numéro en clair sur une page indexée finit dans les bases de démarchage.
+   Il est encodé ici et reconstruit au clic, ce qu'un visiteur humain obtient en
+   une action et un robot de moissonnage à peu près jamais.
+
+   La valeur est écrite en dur plutôt que calculée par `Buffer.from(...)` : ce
+   dernier obligerait à installer @types/node pour un seul appel, dans un
+   projet qui n'a par ailleurs aucune dépendance de types Node. Pour la
+   régénérer si le numéro change :
+
+     node -e "console.log(Buffer.from('+261XXXXXXXXX').toString('base64'))"
+
+   scripts/content-check.mjs vérifie de son côté qu'aucune forme en clair du
+   numéro n'a reparu dans dist/, quelle que soit la façon dont elle y entrerait. */
+const phoneEncoded = 'KzI2MTM4NjEzOTE2Ng==';
+---
+
+<section class="contact" id="contact">
+  <span class="bg" aria-hidden="true">
+    <svg viewBox="0 0 300 190"><use href="#s-spray"></use></svg>
+  </span>
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="bl" aria-hidden="true"><svg><use href="#s-bl"></use></svg></span>
+      <span class="n">{s.contact.n}</span><h2>{s.contact.heading}</h2>
+    </div>
+
+    {/* Deux portes, et deux seulement. Une seule page de fond, deux sorties :
+        personne ne lit un contenu qui ne lui est pas destiné. */}
+    <div class="doors">
+      <a class="door rv" href="/cv/CV_Itokiana_Rajohnson.pdf" download style="--c:var(--inv-sak)">
+        <i class="tick" aria-hidden="true"></i>
+        <h3>{s.contact.doors[0].title}</h3>
+        <p>{s.contact.doors[0].body}</p>
+        <span class="go">{s.contact.doors[0].go} →</span>
+      </a>
+      <a class="door rv" href={`mailto:${EMAIL}`} style="--c:var(--inv-shu)">
+        <i class="tick" aria-hidden="true"></i>
+        <h3>{s.contact.doors[1].title}</h3>
+        <p>{s.contact.doors[1].body}</p>
+        <span class="go">{s.contact.doors[1].go} →</span>
+      </a>
+    </div>
+
+    <div class="rail2">
+      <span><a href={`mailto:${EMAIL}`} set:html={entities(EMAIL)} /></span>
+      <span>
+        <button type="button" id="phone" data-p={phoneEncoded}>{s.contact.revealPhone}</button>
+      </span>
+      <span><a href={NEXTRI} rel="noopener">{s.contact.nextri}</a></span>
+    </div>
+  </div>
+</section>
+
+<script>
+  /* Le numéro est reconstruit au clic, puis le bouton devient un lien `tel:`.
+     Deux temps et non un seul : révéler au chargement remettrait le numéro
+     dans le document que lit un moissonneur qui exécute le JavaScript. */
+  const btn = document.getElementById('phone') as HTMLButtonElement | null;
+  btn?.addEventListener(
+    'click',
+    () => {
+      const raw = atob(btn.dataset.p ?? '');
+      const a = document.createElement('a');
+      a.href = `tel:${raw}`;
+      // Le format d'affichage suit la lecture malgache : +261 38 61 391 66.
+      a.textContent = raw.replace(/^(\+\d{3})(\d{2})(\d{2})(\d{3})(\d{2})$/, '$1 $2 $3 $4 $5');
+      btn.replaceWith(a);
+      a.focus();
+    },
+    { once: true },
+  );
+</script>

@@ -1,0 +1,122 @@
+/* 和紙 washi · 墨 sumi · 紺 kon · 山吹 yamabuki · 若草 wakakusa · 灰桜 haizakura · 朱 shu
+   ────────────────────────────────────────────────────────────────────────────
+   La maquette nomme le fond « papier » (--pa). Ici il s'appelle --bg, comme
+   dans le portfolio de Lionel : scripts/contrast.mjs lit ce fichier et y
+   cherche --bg, --bg2, --bg3 pour composer la pire surface de chaque thème.
+   Renommer les jetons du fond aurait obligé à renommer la porte de contraste
+   avec eux, pour un gain nul. Les couleurs, elles, sont celles de la maquette.
+
+   Quatre couleurs de terrain, et elles portent du sens : chaque mission a la
+   sienne, du plan de quai jusqu'aux réalisations en passant par les trois
+   temps. C'est la seule chose que le rose ne prend pas, parce qu'elles portent
+   une information et lui non.
+
+   Le rose est un rose de teinture ancienne — 灰桜 haizakura, cendré — et non un
+   rose bonbon : la teinte tire vers la terre cuite et la chroma est basse, si
+   bien qu'il se pose sur le papier crème sans crier. */
+:root {
+  --ff: "Archivo", system-ui, sans-serif;
+  --ffd: "Zen Old Mincho", Georgia, serif;
+  --ffm: "JetBrains Mono", ui-monospace, monospace;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --gut: clamp(1.15rem, 4vw, 3.5rem);
+  --max: 1180px;
+}
+
+/* Chaque terrain est dédoublé, comme chez Lionel :
+   --kon   couleur GRAPHIQUE — aplats, bandes du plan, filets, pastilles.
+   --kon-t couleur TEXTE — assombrie jusqu'au franchissement de 4,5:1 sur la
+           pire surface du thème. Les valeurs -t ne sont pas choisies à l'œil :
+           `pnpm contrast` les mesure, et la porte échoue avant la mise en
+           ligne si l'une d'elles retombe sous le seuil. */
+[data-theme="light"] {
+  --bg: #faf5ec;
+  --bg2: #f3ecde;
+  --bg3: #ede4d2;
+  --tx: #23201e;
+  --tx2: #5e574e;
+  /* --tx3 ne porte jamais de texte : mesuré bien sous le seuil AA sur --bg3.
+     Il reste au jeu pour les filets, les graduations de l'axe et les cotes du
+     plan, où aucun seuil de contraste de texte ne s'applique. Pour un gris
+     tertiaire porteur de texte, prendre --tx2. Absent de PAIRS dans
+     scripts/contrast.mjs à dessein : une paire qui échoue exprès dans la porte
+     ne veut rien dire. */
+  --tx3: #a79c8b;
+  --bd: #ddd2bc;
+  --bd2: #c7b9a0;
+  --sh: rgba(35, 32, 30, 0.1);
+
+  --kon: #2e4b6e;
+  --ymb: #c98a1e;
+  --wkk: #6f8b5b;
+  --sak: #c08894;
+  --shu: #c9432e;
+  --kon-t: #2b4665;
+  --ymb-t: #715006;
+  --wkk-t: #465b3c;
+  --sak-t: #814f5a;
+  --shu-t: #a3351f;
+
+  /* Le lavis de fleur : une surface à peine teintée, qui porte le bandeau
+     d'autorité et le bloc « Le fil ». --wash entre dans la liste des surfaces
+     de la porte de contraste au même titre que --bg3 : c'est du texte qui s'y
+     pose, et rien ne dit a priori laquelle des deux est la pire. */
+  --wash: #f1e7e3;
+  --petal: #c7969c;
+
+  --mb: rgba(250, 245, 236, 0.9);
+  --inv-bg: #23201e;
+  --inv-tx: #faf5ec;
+  --inv-tx2: #a79c8b;
+  --inv-bd: #40392f;
+  --inv-sak: #c9979e;
+  --inv-shu: #e1604a;
+
+  --grain: 0.3;
+  --grain-mode: multiply;
+}
+
+/* 夜桜 yozakura — le hanami de nuit. Le cerisier ne disparaît pas la nuit, il
+   change de lumière : le papier devient bleu de nuit et les pétales gardent
+   leur rose cendré, éclairci juste assez pour rester lisibles. */
+[data-theme="dark"] {
+  --bg: #1a1d24;
+  --bg2: #212530;
+  --bg3: #16181e;
+  --tx: #f2ede3;
+  --tx2: #a8a093;
+  --tx3: #6e6a63;
+  --bd: #333846;
+  --bd2: #454b5c;
+  --sh: rgba(0, 0, 0, 0.5);
+
+  /* Éclairci par rapport à la maquette (#6d93c4), et pas à l'œil : c'est la
+     seule bande du plan qui porte son libellé à l'intérieur, en papier sur
+     l'aplat. À 0,86 d'opacité sur le fond de nuit, l'ancienne valeur donnait
+     4,27:1 — sous le seuil. La porte de contraste l'a refusée. */
+  --kon: #7fa3d0;
+  --ymb: #e0a93c;
+  --wkk: #93ae7c;
+  --sak: #c9959d;
+  --shu: #e1604a;
+  --kon-t: #8fafd8;
+  --ymb-t: #e0a93c;
+  --wkk-t: #93ae7c;
+  --sak-t: #d8a9b0;
+  --shu-t: #f0765f;
+
+  --wash: #241e24;
+  --petal: #b98a92;
+
+  --mb: rgba(26, 29, 36, 0.9);
+  --inv-bg: #f2ede3;
+  --inv-tx: #1a1d24;
+  --inv-tx2: #5e574e;
+  --inv-bd: #c7b9a0;
+  --inv-sak: #814f5a;
+  --inv-shu: #a3351f;
+
+  --grain: 0.22;
+  --grain-mode: overlay;
+}

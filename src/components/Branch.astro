@@ -1,0 +1,12 @@
+---
+/* Le séparateur : une branche en travers de la page, pleine largeur et sans
+   gouttière. Une branche coupée net au milieu du papier montrerait son bout
+   carré ; sortie du cadre, elle vient d'ailleurs.
+
+   Le viewBox est déclaré ici et non dans le symbole : sans lui, `height:auto`
+   retombe sur les 150 px par défaut du SVG et le rameau s'écrase en filet. */
+---
+
+<div class="branch rv" aria-hidden="true">
+  <svg viewBox="0 0 1200 100"><use href="#s-branch"></use></svg>
+</div>

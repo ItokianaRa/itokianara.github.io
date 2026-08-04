@@ -1,0 +1,29 @@
+---
+import LangSwitch from './LangSwitch.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { t, type Lang } from '../i18n/utils';
+
+const { lang } = Astro.props as { lang: Lang };
+const s = t(lang);
+const home = lang === 'en' ? '/en/' : '/';
+---
+
+<header class="hdr">
+  <div class="in">
+    <a class="brand" href={home}>
+      <span class="bl" aria-hidden="true"><svg><use href="#s-bl"></use></svg></span>
+      <b>{s.name}</b>
+    </a>
+    <nav class="nav" aria-label={s.nav.contact}>
+      <a href="#qui">{s.nav.who}</a>
+      <a href="#travail">{s.nav.work}</a>
+      <a href="#livre">{s.nav.delivered}</a>
+      <a href="#parcours">{s.nav.path}</a>
+      <a href="#contact">{s.nav.contact}</a>
+      <span class="tools">
+        <LangSwitch />
+        <ThemeToggle labelPrefix={s.themeLabel} states={s.themeStates} />
+      </span>
+    </nav>
+  </div>
+</header>

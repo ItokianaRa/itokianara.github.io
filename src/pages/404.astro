@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import { t, type Lang } from '../i18n/utils';
+
+/* GitHub Pages sert ce fichier pour toute adresse inconnue, quelle que soit la
+   langue de la demande : il n'a aucun moyen de router une 404 par préfixe. La
+   page est donc rendue en français, la locale par défaut du site, et le
+   sélecteur de langue de l'en-tête reste disponible pour basculer. */
+const lang = (Astro.currentLocale ?? 'fr') as Lang;
+const s = t(lang);
+---
+
+<Base title={`${s.notFound.title} — ${s.name}`} indexable={false}>
+  <section class="nf wrap">
+    <span class="bl" aria-hidden="true"><svg><use href="#s-bl"></use></svg></span>
+    <h1>{s.notFound.title}</h1>
+    <p>{s.notFound.body}</p>
+    <a class="btn" href={lang === 'en' ? '/en/' : '/'}>{s.notFound.home}</a>
+  </section>
+</Base>

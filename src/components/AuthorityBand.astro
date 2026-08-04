@@ -1,0 +1,25 @@
+---
+import { t, type Lang } from '../i18n/utils';
+
+/* Le bandeau d'autorité : les vrais noms, en grand.
+   C'est l'actif le plus fort de la page — un Ministère, un port, deux marques
+   mondiales — et il ne demande à personne de croire quoi que ce soit sur
+   parole. Aucune capture d'écran ne l'accompagne : systèmes d'État et comptes
+   clients d'agence, la règle du CV maître s'applique au site sans exception. */
+
+const { lang } = Astro.props as { lang: Lang };
+const s = t(lang);
+---
+
+<section class="auth" aria-label={s.authority.label}>
+  <div class="in wrap">
+    {
+      s.authority.items.map((item) => (
+        <article class="rv">
+          <span class="mono">{item.context}</span>
+          <h3>{item.name}</h3>
+        </article>
+      ))
+    }
+  </div>
+</section>

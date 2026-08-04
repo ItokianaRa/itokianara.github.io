@@ -1,0 +1,127 @@
+---
+import { quai } from '../lib/quai.mjs';
+import { survey, t, type Lang } from '../i18n/utils';
+
+/* Le plan de quai.
+   ────────────────────────────────────────────────────────────────────────────
+   Dans la maquette, tout ce bloc était construit par du JavaScript au
+   chargement : la géométrie, les bandes, l'axe, le sceau, le filet
+   d'armateur. Ici le même calcul tourne au BUILD (src/lib/quai.mjs) et ce
+   composant n'en rend que le résultat. Le plan ne coûte plus un octet de
+   JavaScript, et il reste entier quand JS est désactivé.
+
+   Les positions passent par des attributs `style` parce que ce sont des
+   valeurs calculées, uniques à chaque bande : les écrire en classes
+   demanderait une feuille générée. C'est pour elles que la CSP autorise
+   `'unsafe-inline'` dans `style-src-attr` seulement (astro.config.mjs). */
+
+const { lang } = Astro.props as { lang: Lang };
+const s = t(lang);
+const q = s.quai;
+const plan = quai();
+
+/* Les identifiants de poste et de bande viennent de quai.mjs, qui est du
+   JavaScript : TypeScript les voit comme des `string` et refuse de les passer
+   à un objet aux clés littérales. Le lien entre les deux est déjà tenu par
+   scripts/quai-check.mjs, qui échoue si un identifiant du plan n'a pas son
+   libellé dans les deux langues — ce que ce typage ne saurait pas vérifier de
+   toute façon, puisqu'il ne connaît pas le contenu du .mjs. */
+const laneLabels = q.lanes as Record<string, string>;
+const barLabels = q.bars as Record<string, string>;
+---
+
+{/* Pas de `.rv` sur le plan : il est au-dessus de la ligne de flottaison et
+    ses bandes portent déjà leur propre entrée. Une révélation liée au
+    défilement par-dessus l'accostage ferait jouer deux animations sur le
+    même objet, et la seconde masquerait le pic de la page. */}
+<div class="plan" role="img" aria-label={q.alt}>
+  <div class="plan-hd">
+    <span class="mono">{q.title}</span>
+    <span class="mono">{q.survey.replace('{date}', survey(plan.now))}</span>
+  </div>
+
+  <div class="axis">
+    {
+      plan.years.map((tick) => (
+        <b class="yr" style={`left:${tick.left}%`}>
+          {tick.y}
+        </b>
+      ))
+    }
+    {/* 朱 Le sceau ne marque que la ligne d'aujourd'hui. C'est un hanko, pas un
+        ornement : une seule chose à dire. */}
+    <div class="seal" style={`left:${plan.nowPct}%`}>
+      <svg aria-hidden="true"><use href="#s-bl"></use></svg>
+      <b>{`${String(plan.now[1]).padStart(2, '0')} · ${plan.now[0]}`}</b>
+    </div>
+  </div>
+
+  {
+    plan.lanes.map((lane) => (
+      <div class="lane">
+        <span class="mono">{laneLabels[lane.id]}</span>
+        <div class="track" style={`--ct:var(--${lane.role}-t)`}>
+          {lane.bars.map((bar) => {
+            const label = barLabels[bar.id];
+            return (
+              <>
+                <div
+                  class:list={['bar', { free: bar.free }]}
+                  style={`--c:var(--${lane.role});left:${bar.left}%;width:${bar.width}%;--d:${bar.delay}s`}>
+                  {bar.inside && label && <b>{label}</b>}
+                </div>
+                {bar.free && (
+                  <span class="buds" style={`left:${bar.left}%;width:${bar.width}%`}>
+                    {plan.buds.map((bud, i) => (
+                      <span
+                        class="bl"
+                        style={`left:${bud.left}%;top:${bud.top}%;width:${bud.size}px;height:${bud.size}px;--r:${bud.rotate}deg;--d:${1.2 + i * 0.12}s`}>
+                        <svg aria-hidden="true">
+                          <use href={bud.kind === 'bud' ? '#s-bud' : '#s-bl'} />
+                        </svg>
+                      </span>
+                    ))}
+                  </span>
+                )}
+                {!bar.inside && label && (
+                  <span
+                    class:list={['blabel', { flip: bar.flip }]}
+                    style={
+                      bar.flip
+                        ? `right:${100 - bar.left}%;--d:${bar.delay + 0.4}s`
+                        : `left:${bar.left + bar.width}%;--d:${bar.delay + 0.4}s`
+                    }>
+                    {label}
+                  </span>
+                )}
+              </>
+            );
+          })}
+          {/* La ligne d'aujourd'hui traverse chaque piste : aucun calcul de
+              hauteur, aucun élément qui enjambe les pistes. */}
+          <i class="nowline" style={`left:${plan.nowPct}%`} aria-hidden="true"></i>
+        </div>
+      </div>
+    ))
+  }
+
+  {/* Le filet d'armateur : BICI paie sans interruption de mars 2021 à janvier
+      2024, y compris pendant la mission RAPP IO. Le CV maître exige que les
+      entrées restent distinctes — c'est du consultanat, le travail est fait
+      chez le client. Ce filet dit la continuité d'emploi sans les fusionner,
+      et le trou apparent du parcours disparaît sans qu'une ligne du CV bouge. */}
+  <div class="contract">
+    <span class="mono">{q.contract.label}</span>
+    <div class="crule">
+      <i style={`left:${plan.contract.left}%;width:${plan.contract.width}%`}></i>
+      <em style={`left:calc(${plan.contract.left}% + 1rem)`}>{q.contract.text}</em>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span style="--c:var(--kon)"><i class="sw"></i>{q.legend.kon}</span>
+    <span style="--c:var(--ymb)"><i class="sw"></i>{q.legend.ymb}</span>
+    <span style="--c:var(--wkk)"><i class="sw"></i>{q.legend.wkk}</span>
+    <span><i class="dash"></i>{q.legend.free}</span>
+  </div>
+</div>

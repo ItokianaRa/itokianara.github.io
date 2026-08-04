@@ -1,0 +1,135 @@
+/* ═══ Mouvement ═════════════════════════════════════════════════════════════
+   Trois couches, et une règle qui les gouverne toutes : rien n'anime une
+   propriété de mise en page. `transform`, `opacity` et `clip-path`
+   uniquement, en ease-out-expo, sans rebond ni élastique.
+
+   ① À l'entrée, une fois au chargement : le plan de quai s'accoste, bande par
+      bande, du plus ancien au plus récent, puis les libellés se posent, puis
+      le sceau tombe. C'est le pic de la page.
+   ② Lié au défilement : les blocs progressent AVEC le défilement et reculent
+      si l'on remonte, via les timelines CSS natives. Pas de déclenchement par
+      seuil, donc pas d'effet de saccade à la remontée.
+   ③ Le défilement amorti lui-même, dans scripts/smooth-scroll.ts.
+
+   Tout ce fichier vit sous `prefers-reduced-motion: no-preference`. Ce n'est
+   pas une politesse : l'amortissement et les révélations sont exactement ce
+   qui provoque le mal des transports chez les personnes sensibles. Hors de
+   cette requête, le site est complet et immédiatement lisible. ────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* ── ① l'accostage ────────────────────────────────────────────────────── */
+  /* --d est posé en attribut par Quai.astro, calculé au build : une bande
+     ajoutée prend son rang dans la cascade sans qu'on touche à ce fichier. */
+  .bar {
+    transform: scaleX(0);
+    animation: accost 1.1s var(--ease) var(--d, 0.3s) forwards;
+  }
+  @keyframes accost {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .blabel {
+    opacity: 0;
+    animation: fadein 0.5s var(--ease) var(--d, 1.2s) forwards;
+  }
+  .buds .bl {
+    opacity: 0;
+    animation: fadein 0.6s var(--ease) var(--d, 1.6s) forwards;
+  }
+  @keyframes fadein {
+    to {
+      opacity: 0.9;
+    }
+  }
+
+  /* Le sceau tombe en dernier, et il tombe : une empreinte se pose d'un coup,
+     elle ne se fond pas. C'est le seul mouvement de la page qui parte d'une
+     échelle supérieure à 1. */
+  .seal {
+    opacity: 0;
+    animation: stamp 0.5s var(--ease) 1.9s forwards;
+  }
+  @keyframes stamp {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) scale(1.4);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+  }
+
+  /* ── le hero ──────────────────────────────────────────────────────────── */
+  /* .js-motion est posée par le script bloquant du <head>, donc AVANT le
+     premier rendu : sans JavaScript, rien n'est jamais caché. La classe
+     `.shown` est posée par motion.ts immédiatement, sans attendre le
+     défilement — le h1 porte le LCP et ne doit dépendre d'aucun observateur.
+
+     L'état s'appelle `.shown` et non `.in`, qui serait pourtant le nom
+     évident. `.in` est déjà pris : c'est le conteneur de mise en page de la
+     maquette, dans `.hdr .in`, `.hero .in`, `.auth .in` et `.ftr .in`. Posée
+     sur le bloc du hero, une classe `.in` le faisait correspondre à
+     `.hero .in { display: grid }` et le hero se dépliait en deux colonnes,
+     titre d'un côté, pastille et chapeau de l'autre. Deux systèmes de classes
+     venus de deux sources — la maquette et la couche de mouvement — qui se
+     partagent un nom de deux lettres : ne pas réintroduire `.in` ici. */
+  .js-motion .stagger > * {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  .js-motion .stagger.shown > * {
+    animation: rise 0.7s var(--ease) forwards;
+  }
+  .js-motion .stagger.shown > *:nth-child(1) {
+    animation-delay: 0.05s;
+  }
+  .js-motion .stagger.shown > *:nth-child(2) {
+    animation-delay: 0.13s;
+  }
+  .js-motion .stagger.shown > *:nth-child(3) {
+    animation-delay: 0.21s;
+  }
+  .js-motion .stagger.shown > *:nth-child(4) {
+    animation-delay: 0.29s;
+  }
+  .js-motion .stagger.shown > *:nth-child(5) {
+    animation-delay: 0.37s;
+  }
+  @keyframes rise {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ── ② lié au défilement ──────────────────────────────────────────────── */
+  @supports (animation-timeline: view()) {
+    .js-motion .rv {
+      animation: rise 1ms var(--ease) both;
+      animation-timeline: view();
+      /* La plage commence tôt et finit tôt : un bloc est entièrement révélé
+         bien avant d'atteindre le centre de l'écran. Une plage qui court
+         jusqu'en haut du cadre donne un texte qui n'est jamais tout à fait
+         net, ce qui se lit comme un défaut d'affichage et non comme un
+         mouvement. */
+      animation-range: entry 8% cover 34%;
+    }
+  }
+
+  /* Repli pour Firefox et Safari, qui ne gèrent pas encore
+     `animation-timeline`. motion.ts pose .in par IntersectionObserver. Ce
+     n'est pas une dégradation visible : le site reste complet, seule la
+     continuité du mouvement est perdue. */
+  @supports not (animation-timeline: view()) {
+    .js-motion .rv {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .js-motion .rv.shown {
+      animation: rise 0.7s var(--ease) forwards;
+    }
+  }
+}

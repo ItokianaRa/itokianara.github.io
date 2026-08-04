@@ -1,0 +1,40 @@
+---
+import { t, type Lang } from '../i18n/utils';
+
+const { lang } = Astro.props as { lang: Lang };
+const s = t(lang);
+
+/* Le lien NEXTRI vit ici, dans le premier mouvement, et pas seulement en pied
+   de page : la passerelle vers le collectif fait partie de ce qu'Itokiana
+   propose, pas d'une mention légale. */
+const NEXTRI = 'https://nextrimg.github.io/nextri_portfolio/';
+---
+
+<section class="blk wrap" id="qui">
+  <div class="sec-head rv">
+    <span class="bl" aria-hidden="true"><svg><use href="#s-bl"></use></svg></span>
+    <span class="n">{s.who.n}</span><h2>{s.who.heading}</h2>
+  </div>
+
+  <div class="prose rv">
+    {s.who.body.map((p) => <p>{p}</p>)}
+    <p>
+      {s.who.bodyBeforeLink}<a href={NEXTRI} rel="noopener">{s.who.nextriLink}</a>{s.who.bodyAfterLink}
+    </p>
+  </div>
+
+  {/* Fiche d'escale. Portée unique : tout ce qu'elle contient vaut pour la
+      carrière entière, jamais pour une seule mission. C'est ce qui la sépare
+      d'une rangée de compteurs — et « 2021 » plutôt que « 5 ans », parce
+      qu'une date de départ ne dérive jamais. */}
+  <div class="fiche rv">
+    {
+      s.who.fiche.map((cell) => (
+        <div>
+          <span class="mono">{cell.label}</span>
+          <strong>{cell.value}</strong>
+        </div>
+      ))
+    }
+  </div>
+</section>

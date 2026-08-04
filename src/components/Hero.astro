@@ -1,0 +1,57 @@
+---
+import Quai from './Quai.astro';
+import { t, type Lang } from '../i18n/utils';
+
+const { lang } = Astro.props as { lang: Lang };
+const s = t(lang);
+
+/* Le semis de fleurs du fond. Aucune n'est posée droite et aucune ne partage
+   l'angle de sa voisine : c'est ce qui sépare un semis d'un gabarit. Les
+   valeurs sont celles de la maquette, pas un tirage au hasard — un aléatoire
+   au build donnerait une page différente à chaque construction. */
+const SEMIS = [
+  { left: 8, top: 66, size: 19, rotate: -22, kind: 'bl', opacity: 0.5 },
+  { left: 41, top: 12, size: 13, rotate: 38, kind: 'bl', opacity: 0.32 },
+  { left: 52, top: 84, size: 15, rotate: -9, kind: 'bl', opacity: 0.38 },
+  { left: 3, top: 30, size: 10, rotate: 61, kind: 'bud', opacity: 0.28 },
+];
+---
+
+<section class="hero">
+  {/* Pas d'idéogramme en filigrane : c'est un rameau dessiné qui tient le fond
+      du hero, et sa floraison passe derrière le titre. Une fleur se lit sans
+      traduction ; un caractère qu'on ne sait pas lire est un décor exotique. */}
+  <div class="petals" aria-hidden="true">
+    <span class="sp"><svg viewBox="0 0 300 190"><use href="#s-spray"></use></svg></span>
+    {
+      SEMIS.map((f) => (
+        <span
+          class="bl"
+          style={`left:${f.left}%;top:${f.top}%;width:${f.size}px;height:${f.size}px;opacity:${f.opacity};--r:${f.rotate}deg`}>
+          <svg>
+            <use href={f.kind === 'bud' ? '#s-bud' : '#s-bl'} />
+          </svg>
+        </span>
+      ))
+    }
+  </div>
+
+  <div class="in wrap">
+    <div class="stagger" id="heroA">
+      <div class="pill">
+        <i aria-hidden="true"></i><span>{s.hero.status}</span>
+      </div>
+      <h1>{s.hero.title} <em>{s.hero.titleAccent}</em>.</h1>
+      <p class="lede">{s.hero.lead}</p>
+      <div class="places">
+        {s.hero.places.map((p) => <span class="mono">{p}</span>)}
+      </div>
+      <div class="cta">
+        <a class="btn" href="/cv/CV_Itokiana_Rajohnson.pdf" download>{s.hero.ctaCv}</a>
+        <a class="btn gh" href="#contact">{s.hero.ctaContact}</a>
+      </div>
+    </div>
+
+    <Quai lang={lang} />
+  </div>
+</section>

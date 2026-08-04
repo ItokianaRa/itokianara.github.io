@@ -1,0 +1,20 @@
+---
+import { t, type Lang } from '../i18n/utils';
+
+const { lang } = Astro.props as { lang: Lang };
+const s = t(lang);
+
+/* L'année vient de la construction, pas d'une constante : un pied de page qui
+   affiche l'an dernier est le premier signe qu'un site n'est plus tenu. */
+const year = new Date().getFullYear();
+---
+
+<footer class="ftr">
+  <div class="in">
+    <span class="mono">{s.footer.rights.replace('{year}', String(year))}</span>
+    <span class="bl" style="width:14px;height:14px;opacity:.75;rotate:-14deg" aria-hidden="true">
+      <svg><use href="#s-bl"></use></svg>
+    </span>
+    <span class="mono">{s.footer.built}</span>
+  </div>
+</footer>

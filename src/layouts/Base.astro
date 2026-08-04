@@ -1,0 +1,124 @@
+---
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import Sprite from '../components/Sprite.astro';
+import { bothPaths, t, type Lang } from '../i18n/utils';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/motion.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  /* Une seule prop, pas un système : la 404 est la seule page hors accueil.
+     À `false`, elle retire la canonique et les trois hreflang, et ajoute
+     `<meta name="robots" content="noindex">`. */
+  indexable?: boolean;
+}
+
+const { title, description, indexable = true } = Astro.props as Props;
+const lang = (Astro.currentLocale ?? 'fr') as Lang;
+const s = t(lang);
+
+const { frPath, enPath } = bothPaths(Astro.url.pathname);
+const self = lang === 'en' ? enPath : frPath;
+
+/* Personne unique, identique sur les deux pages : un nom et une adresse ne se
+   traduisent pas. Pas de `sameAs` : le CV maître ne mentionne aucun profil
+   social, et en inventer un serait un fait fabriqué. Pas de numéro de
+   téléphone non plus : il n'est jamais en clair dans le HTML servi
+   (Contact.astro le décode au clic), et l'inscrire ici défairait exactement
+   la protection que ce détour met en place. */
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Itokiana Rajohnson',
+  jobTitle: s.meta.title.split('—')[1]?.trim(),
+  email: 'mailto:rajohnsonitokiana@gmail.com',
+  address: { '@type': 'PostalAddress', addressLocality: 'Antananarivo', addressCountry: 'MG' },
+  knowsLanguage: ['mg', 'fr', 'en'],
+  alumniOf: [
+    { '@type': 'CollegeOrUniversity', name: "Université Côte d'Azur" },
+    { '@type': 'CollegeOrUniversity', name: 'IT University' },
+  ],
+};
+---
+
+<!doctype html>
+<!-- data-theme est écrit en dur : sans JavaScript le site s'affiche en clair,
+     qui passe l'AA intégralement, et le bloc de jetons sombres n'est jamais
+     recopié dans un @media (prefers-color-scheme) qui pourrait diverger. -->
+<html lang={lang} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Le seul en-tête de sécurité que GitHub Pages laisse poser depuis le
+         document. La CSP, elle, est écrite par Astro (astro.config.mjs). -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>{title}</title>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {description && <meta name="description" content={description} />}
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={new URL(self, Astro.site)} />
+    <meta property="og:locale" content={lang === 'fr' ? 'fr_FR' : 'en_GB'} />
+    {
+      indexable ? (
+        <>
+          <link rel="canonical" href={new URL(self, Astro.site)} />
+          <link rel="alternate" hreflang="fr" href={new URL(frPath, Astro.site)} />
+          <link rel="alternate" hreflang="en" href={new URL(enPath, Astro.site)} />
+          {/* x-default vise le français : c'est la locale par défaut du site, et
+              c'est elle qui répond sur les URL sans préfixe. */}
+          <link rel="alternate" hreflang="x-default" href={new URL(frPath, Astro.site)} />
+        </>
+      ) : (
+        <meta name="robots" content="noindex" />
+      )
+    }
+    <!-- Le h1 porte le LCP et il est en Zen Old Mincho 900 : seule cette
+         graisse est préchargée, pour qu'elle ne se dispute pas la bande
+         passante avec les familles qui ne bloquent pas le premier rendu. -->
+    <link rel="preload" href="/fonts/ZenOldMincho-900.woff2" as="font" type="font/woff2" crossorigin />
+    <script type="application/ld+json" set:html={JSON.stringify(person)} is:inline />
+    <!-- Bloquant : pose le thème avant le premier rendu, donc aucun flash. -->
+    <script is:inline>
+      (function () {
+        var stored = null;
+        try {
+          stored = localStorage.getItem("theme");
+        } catch (e) {}
+        var sys = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        var d = document.documentElement;
+        d.dataset.theme = stored === "light" || stored === "dark" ? stored : sys;
+        d.dataset.themePref = stored || "system";
+        // Posée avant le premier rendu : .rv et .stagger ne se cachent que pour
+        // un navigateur qui va effectivement les révéler (motion.css).
+        if (!matchMedia("(prefers-reduced-motion: reduce)").matches) d.classList.add("js-motion");
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">{s.skip}</a>
+    <Sprite />
+    <SiteHeader lang={lang} />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter lang={lang} />
+    <script>
+      import "../scripts/theme.ts";
+    </script>
+    <script>
+      import "../scripts/motion.ts";
+    </script>
+    <script>
+      import "../scripts/smooth-scroll.ts";
+    </script>
+  </body>
+</html>

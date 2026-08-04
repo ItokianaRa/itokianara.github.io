@@ -1,0 +1,43 @@
+---
+import { t, type Lang } from '../i18n/utils';
+
+const { lang } = Astro.props as { lang: Lang };
+const s = t(lang);
+---
+
+<section class="blk wrap" id="travail">
+  <div class="sec-head rv">
+    <span class="bl" aria-hidden="true"><svg><use href="#s-bl"></use></svg></span>
+    <span class="n">{s.work.n}</span><h2>{s.work.heading}</h2>
+  </div>
+
+  {/* Trois temps, trois terrains DIFFÉRENTS. La règle est mécanique et non
+      éditoriale : chaque compétence est prouvée par une mission distincte.
+      C'est elle qui empêche la page de redevenir un monologue sur le SIF. */}
+  <div class="temps">
+    {
+      s.work.steps.map((step) => (
+        <article class="tp rv" style={`--c:var(--${step.role});--ct:var(--${step.role}-t)`}>
+          <div class="l">
+            <h3>{step.title}</h3>
+            <span class="terrain">{step.field}</span>
+          </div>
+          <p>{step.body}</p>
+        </article>
+      ))
+    }
+  </div>
+
+  {/* Le fil. Ce n'est pas un quatrième temps : c'est ce qui traverse les trois,
+      et c'est la thèse de la page. */}
+  <div class="fil rv">
+    <span class="cnr" aria-hidden="true">
+      <svg viewBox="0 0 300 190"><use href="#s-spray"></use></svg>
+    </span>
+    <span class="mono">{s.work.thread.label}</span>
+    <p>{s.work.thread.body}</p>
+    <ul>
+      {s.work.thread.items.map((item) => <li>{item}</li>)}
+    </ul>
+  </div>
+</section>

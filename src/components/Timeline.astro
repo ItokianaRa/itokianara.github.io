@@ -1,0 +1,31 @@
+---
+import { t, type Lang } from '../i18n/utils';
+
+const { lang } = Astro.props as { lang: Lang };
+const s = t(lang);
+---
+
+<section class="blk wrap" id="parcours">
+  <div class="sec-head rv">
+    <span class="bl" aria-hidden="true"><svg><use href="#s-bl"></use></svg></span>
+    <span class="n">{s.path.n}</span><h2>{s.path.heading}</h2>
+  </div>
+
+  {/* Les deux entrées BICI restent DISTINCTES, décision du CV maître du
+      21/07/2026 : entre les deux il y a des missions internationales, et les
+      fusionner effacerait ce qui fait la valeur du parcours. La continuité
+      d'emploi, elle, se lit sur le filet d'armateur du plan de quai. */}
+  <div class="tl">
+    {
+      s.path.rows.map((row) => (
+        <div class="row rv">
+          <span class="mono">{row.period}</span>
+          <div>
+            <h3>{row.title}</h3>
+            <p class="emp">{row.employer}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
