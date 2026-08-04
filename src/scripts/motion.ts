@@ -4,7 +4,7 @@
       cette ligne est le SEUL chemin qui en sort : contrairement à `.rv`,
       `.stagger` n'a ni chemin natif dans le bloc `@supports`, ni chemin par
       IntersectionObserver. Elle est donc jouée en premier et hors de tout
-      `try` partagé — une exception levée plus bas laisserait sinon le h1, le
+      `try` partagé : une exception levée plus bas laisserait sinon le h1, le
       chapeau, les lieux et les deux boutons invisibles pour toujours, sur la
       seule page du site.
 

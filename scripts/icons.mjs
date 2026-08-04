@@ -143,7 +143,7 @@ function ico(entries) {
 const font = (await readFile(join(PUBLIC, 'fonts', 'ZenOldMincho-900.woff2'))).toString('base64');
 
 /* `--disable-lcd-text` : sans lui, Chromium rend la lettre en crénelage
-   SOUS-PIXEL et dépose des franges orange et bleues le long des jambages —
+   SOUS-PIXEL et dépose des franges orange et bleues le long des jambages,
    visibles à l'œil nu dès qu'on agrandit un favicon de 16 px. Ces franges ne
    sont justes que sur une dalle RVB dans cet ordre précis ; partout ailleurs,
    et à toute autre échelle, elles ressortent comme de la couleur parasite dans
@@ -164,8 +164,7 @@ for (const target of TARGETS) {
   await p.setContent(page(font, target));
   /* Attendre le chargement réel de la police, et pas seulement `fonts.ready` :
      sans cette garantie, Chromium rasterise parfois la lettre dans la police
-     de substitution, et l'icône part avec un « I » de grotesque — c'est
-     exactement le défaut que ce script existe pour éviter. */
+     de substitution, et l'icône part avec un « I » de grotesque, exactement le défaut que ce script existe pour éviter. */
   await p.evaluate(() => document.fonts.load('900 100px Mincho').then(() => document.fonts.ready));
   const png = await p.screenshot({ omitBackground: true });
   await p.close();

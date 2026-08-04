@@ -66,7 +66,7 @@
   /* .js-motion est posée par le script bloquant du <head>, donc AVANT le
      premier rendu : sans JavaScript, rien n'est jamais caché. La classe
      `.shown` est posée par motion.ts immédiatement, sans attendre le
-     défilement — le h1 porte le LCP et ne doit dépendre d'aucun observateur.
+     défilement : le h1 porte le LCP et ne doit dépendre d'aucun observateur.
 
      L'état s'appelle `.shown` et non `.in`, qui serait pourtant le nom
      évident. `.in` est déjà pris : c'est le conteneur de mise en page de la
@@ -74,7 +74,7 @@
      sur le bloc du hero, une classe `.in` le faisait correspondre à
      `.hero .in { display: grid }` et le hero se dépliait en deux colonnes,
      titre d'un côté, pastille et chapeau de l'autre. Deux systèmes de classes
-     venus de deux sources — la maquette et la couche de mouvement — qui se
+     venus de deux sources (la maquette et la couche de mouvement) qui se
      partagent un nom de deux lettres : ne pas réintroduire `.in` ici. */
   .js-motion .stagger > * {
     opacity: 0;

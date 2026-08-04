@@ -1,9 +1,10 @@
-# Portfolio — Itokiana Rajohnson
+# Portfolio · Itokiana Rajohnson
 
 Site statique d'une page, bilingue français / anglais, publié sur GitHub Pages
 à l'adresse <https://itokianara.github.io>.
 
-Direction artistique : **le document de printemps** — washi, mincho, encre. Le
+Direction artistique : **le document de printemps**, fait de washi, de mincho
+et d'encre. Le
 cerisier est présent mais toujours *dessiné*, jamais écrit : pas d'idéogramme,
 des fleurs à cinq pétales échancrés, un rameau fuselé en séparateur, un sceau
 en fleur, un lavis sur deux surfaces, des bourgeons sur le poste libre.
@@ -50,7 +51,7 @@ révélation du numéro, la couche de mouvement et le défilement amorti.
 **Les polices sont auto-hébergées, sous-ensemble `latin` seul.** Zen Old Mincho
 est une police japonaise dont la famille complète pèse plusieurs mégaoctets de
 kana et de kanji ; le site n'en affiche aucun. Total des trois familles :
-**97 Kio**. Aucun appel à Google Fonts en production — `pnpm content` échoue si
+**97 Kio**. Aucun appel à Google Fonts en production, et `pnpm content` échoue si
 un s'y glisse.
 
 **Le contraste est une porte, pas une intention.** Chaque couleur de terrain est
@@ -69,7 +70,7 @@ Chaque fait affiché trace vers `CV_Itokiana_Rajohnson_MASTER.md`. Les règles d
 CV maître s'appliquent au site sans exception :
 
 1. Aucun chiffre indéfendable en entretien technique.
-2. Aucune capture d'écran du SIF, du SIGFU, ni des comptes clients d'agence —
+2. Aucune capture d'écran du SIF, du SIGFU, ni des comptes clients d'agence :
    systèmes d'État et comptes d'agence.
 3. Aucun projet fictif, aucune démo simulée, aucun profil social inventé.
 4. Aucun compteur de vanité.

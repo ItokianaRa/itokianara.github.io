@@ -11,7 +11,7 @@
    temps. C'est la seule chose que le rose ne prend pas, parce qu'elles portent
    une information et lui non.
 
-   Le rose est un rose de teinture ancienne — 灰桜 haizakura, cendré — et non un
+   Le rose est un rose de teinture ancienne, 灰桜 haizakura, cendré, et non un
    rose bonbon : la teinte tire vers la terre cuite et la chroma est basse, si
    bien qu'il se pose sur le papier crème sans crier. */
 :root {
@@ -25,8 +25,8 @@
 }
 
 /* Chaque terrain est dédoublé, comme chez Lionel :
-   --kon   couleur GRAPHIQUE — aplats, bandes du plan, filets, pastilles.
-   --kon-t couleur TEXTE — assombrie jusqu'au franchissement de 4,5:1 sur la
+   --kon   couleur GRAPHIQUE : aplats, bandes du plan, filets, pastilles.
+   --kon-t couleur TEXTE : assombrie jusqu'au franchissement de 4,5:1 sur la
            pire surface du thème. Les valeurs -t ne sont pas choisies à l'œil :
            `pnpm contrast` les mesure, et la porte échoue avant la mise en
            ligne si l'une d'elles retombe sous le seuil. */
@@ -77,7 +77,7 @@
   --grain-mode: multiply;
 }
 
-/* 夜桜 yozakura — le hanami de nuit. Le cerisier ne disparaît pas la nuit, il
+/* 夜桜 yozakura, le hanami de nuit. Le cerisier ne disparaît pas la nuit, il
    change de lumière : le papier devient bleu de nuit et les pétales gardent
    leur rose cendré, éclairci juste assez pour rester lisibles. */
 [data-theme="dark"] {
@@ -94,7 +94,7 @@
   /* Éclairci par rapport à la maquette (#6d93c4), et pas à l'œil : c'est la
      seule bande du plan qui porte son libellé à l'intérieur, en papier sur
      l'aplat. À 0,86 d'opacité sur le fond de nuit, l'ancienne valeur donnait
-     4,27:1 — sous le seuil. La porte de contraste l'a refusée. */
+     4,27:1, sous le seuil. La porte de contraste l'a refusée. */
   --kon: #7fa3d0;
   --ymb: #e0a93c;
   --wkk: #93ae7c;

@@ -6,7 +6,7 @@ jobs:
     # Une borne dure. Sans elle, une étape qui attend un verrou système attend
     # jusqu'au plafond de six heures de GitHub, sans rien afficher : le job
     # n'échoue pas, il dort, et on croit qu'il travaille. Quinze minutes est
-    # large — le job complet tourne en trois à quatre.
+    # large : le job complet tourne en trois à quatre.
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +43,7 @@ jobs:
       # `sudo apt-get update && apt-get install` avant tout téléchargement.
       # Sur un runner GitHub, `unattended-upgrades` tourne au démarrage de la
       # machine et tient le verrou dpkg : apt attend alors ce verrou sans
-      # limite et sans rien écrire, et l'étape paraît bloquée — relevé le
+      # limite et sans rien écrire, et l'étape paraît bloquée. Relevé le
       # 04/08/2026. Or l'image `ubuntu-latest` embarque déjà Chrome et Firefox,
       # donc leurs bibliothèques partagées : `--with-deps` réinstalle ce qui
       # est là.

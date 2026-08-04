@@ -25,7 +25,9 @@ export default {
   name: 'Itokiana Rajohnson',
 
   meta: {
-    title: 'Itokiana Rajohnson — Développeuse Full Stack Senior',
+    title: 'Itokiana Rajohnson · Développeuse Full Stack Senior',
+    // Repris tel quel par le JSON-LD Person de Base.astro.
+    jobTitle: 'Développeuse Full Stack Senior',
     description:
       'Développeuse Full Stack Senior et appui à la conduite de projet, à Antananarivo. Cinq ans sur des systèmes déjà en production : système foncier national ivoirien, applications portuaires, comptes web de marques internationales.',
   },
@@ -62,10 +64,10 @@ export default {
     // Le second paragraphe porte le lien NEXTRI : il est découpé pour que le
     // lien vive dans le balisage et non dans une chaîne de traduction.
     bodyBeforeLink:
-      "Je code, et j'assure la circulation entre le client, les testeurs et l'équipe de développement — recueil du besoin, spécification, chiffrage, suivi des correctifs jusqu'à la livraison stable. Je viens seule quand le chantier tient dans une personne. Quand il dépasse, nous sommes trois : ",
+      "Je code, et j'assure la circulation entre le client, les testeurs et l'équipe de développement : recueil du besoin, spécification, chiffrage, suivi des correctifs jusqu'à la livraison stable. Je viens seule quand le chantier tient dans une personne. Quand il dépasse, nous sommes trois : ",
     nextriLink: 'NEXTRI',
     bodyAfterLink: ", collectif d'ingénieurs à Antananarivo.",
-    /* Fiche d'escale — portée unique : tout ce qu'elle contient vaut pour la
+    /* Fiche d'escale, de portée unique : tout ce qu'elle contient vaut pour la
        carrière entière. « 2021 » et non « 5 ans » : une date de départ ne
        dérive jamais. */
     fiche: [
@@ -104,7 +106,7 @@ export default {
         role: 'wkk',
         title: 'Tenir une équipe distribuée',
         field: 'RAPP IO Mauritius',
-        body: "Coordination, avec un collègue, de l'équipe de Madagascar — huit personnes — sur les comptes Mercedes-Benz, Smart et Pampers : qualité de son travail et soutien technique, et liaison entre Madagascar et Maurice.",
+        body: "Coordination, avec un collègue, de l'équipe de Madagascar (huit personnes) sur les comptes Mercedes-Benz, Smart et Pampers : qualité de son travail et soutien technique, et liaison entre Madagascar et Maurice.",
       },
     ],
     thread: {
@@ -137,7 +139,7 @@ export default {
         place: 'Antananarivo',
         period: 'Février 2023 → janvier 2024',
         title: 'SPAT Capitainerie & Fonds Routier',
-        body: "Pilotage de la livraison sur des applications métier déjà en production — facturation et opérations de quai. Intégration de nouveaux modules RH et gestion de stocks en reprenant une base de code non documentée, sans interruption du service. Tâches distribuées et cadrées auprès de l'équipe, à partir des demandes remontées par les clients finaux.",
+        body: "Pilotage de la livraison sur des applications métier déjà en production : facturation et opérations de quai. Intégration de nouveaux modules RH et gestion de stocks en reprenant une base de code non documentée, sans interruption du service. Tâches distribuées et cadrées auprès de l'équipe, à partir des demandes remontées par les clients finaux.",
         facts: ['~100 utilisateurs', '10 à 15 développeurs · 1 en remote'],
       },
       {

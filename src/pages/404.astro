@@ -10,7 +10,7 @@ const lang = (Astro.currentLocale ?? 'fr') as Lang;
 const s = t(lang);
 ---
 
-<Base title={`${s.notFound.title} — ${s.name}`} indexable={false}>
+<Base title={`${s.notFound.title} · ${s.name}`} indexable={false}>
   <section class="nf wrap">
     <span class="bl" aria-hidden="true"><svg><use href="#s-bl"></use></svg></span>
     <h1>{s.notFound.title}</h1>

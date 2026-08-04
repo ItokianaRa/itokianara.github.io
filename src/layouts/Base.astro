@@ -33,7 +33,12 @@ const person = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Itokiana Rajohnson',
-  jobTitle: s.meta.title.split('—')[1]?.trim(),
+  /* Une clé à part, et non plus un découpage de `meta.title`. L'ancienne
+     version coupait le titre sur le tiret cadratin qui séparait le nom du
+     poste ; remplacer ce cadratin par un point médian a suffi à rendre
+     `jobTitle` indéfini, sans que rien ne le signale : un JSON-LD amputé ne
+     casse aucune page. Le poste est une donnée, il se déclare. */
+  jobTitle: s.meta.jobTitle,
   email: 'mailto:rajohnsonitokiana@gmail.com',
   address: { '@type': 'PostalAddress', addressLocality: 'Antananarivo', addressCountry: 'MG' },
   knowsLanguage: ['mg', 'fr', 'en'],

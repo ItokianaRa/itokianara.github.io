@@ -24,7 +24,7 @@ const plan = quai();
    JavaScript : TypeScript les voit comme des `string` et refuse de les passer
    à un objet aux clés littérales. Le lien entre les deux est déjà tenu par
    scripts/quai-check.mjs, qui échoue si un identifiant du plan n'a pas son
-   libellé dans les deux langues — ce que ce typage ne saurait pas vérifier de
+   libellé dans les deux langues, ce que ce typage ne saurait pas vérifier de
    toute façon, puisqu'il ne connaît pas le contenu du .mjs. */
 const laneLabels = q.lanes as Record<string, string>;
 const barLabels = q.bars as Record<string, string>;
@@ -107,7 +107,7 @@ const barLabels = q.bars as Record<string, string>;
 
   {/* Le filet d'armateur : BICI paie sans interruption de mars 2021 à janvier
       2024, y compris pendant la mission RAPP IO. Le CV maître exige que les
-      entrées restent distinctes — c'est du consultanat, le travail est fait
+      entrées restent distinctes : c'est du consultanat, le travail est fait
       chez le client. Ce filet dit la continuité d'emploi sans les fusionner,
       et le trou apparent du parcours disparaît sans qu'une ligne du CV bouge. */}
   <div class="contract">

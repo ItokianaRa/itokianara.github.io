@@ -21,7 +21,8 @@ export default {
   name: 'Itokiana Rajohnson',
 
   meta: {
-    title: 'Itokiana Rajohnson — Senior Full Stack Developer',
+    title: 'Itokiana Rajohnson · Senior Full Stack Developer',
+    jobTitle: 'Senior Full Stack Developer',
     description:
       'Senior full stack developer and project support, based in Antananarivo. Five years on systems already in production: the Ivorian national land registry, port applications, the web accounts of international brands.',
   },
@@ -55,7 +56,7 @@ export default {
       'Itokiana Rajohnson, from Antananarivo. I work on systems that are already in service when I arrive: a national land registry mid-overhaul, port applications in production, the web accounts of international brands.',
     ],
     bodyBeforeLink:
-      'I write code, and I keep things moving between the client, the testers and the development team — gathering requirements, writing specifications, estimating effort, tracking fixes through to a stable release. I come alone when the job fits one person. When it does not, there are three of us: ',
+      'I write code, and I keep things moving between the client, the testers and the development team: gathering requirements, writing specifications, estimating effort, tracking fixes through to a stable release. I come alone when the job fits one person. When it does not, there are three of us: ',
     nextriLink: 'NEXTRI',
     bodyAfterLink: ', a collective of engineers in Antananarivo.',
     fiche: [
@@ -88,7 +89,7 @@ export default {
         role: 'wkk',
         title: 'Holding a distributed team together',
         field: 'RAPP IO Mauritius',
-        body: 'Coordinating, with a colleague, the Madagascar team — eight people — on the Mercedes-Benz, Smart and Pampers accounts: the quality of their work and their technical support, and the link between Madagascar and Mauritius.',
+        body: 'Coordinating, with a colleague, the Madagascar team (eight people) on the Mercedes-Benz, Smart and Pampers accounts: the quality of their work and their technical support, and the link between Madagascar and Mauritius.',
       },
     ],
     thread: {
@@ -121,7 +122,7 @@ export default {
         place: 'Antananarivo',
         period: 'February 2023 → January 2024',
         title: 'SPAT harbour master & Road Fund',
-        body: 'Led delivery on business applications already in production — invoicing and quayside operations. Added new HR and stock management modules on top of an undocumented codebase, with no interruption to the service. Distributed and framed the work across the team, from what end clients reported.',
+        body: 'Led delivery on business applications already in production: invoicing and quayside operations. Added new HR and stock management modules on top of an undocumented codebase, with no interruption to the service. Distributed and framed the work across the team, from what end clients reported.',
         facts: ['~100 users', '10 to 15 developers · 1 remote'],
       },
       {

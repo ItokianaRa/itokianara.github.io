@@ -17,7 +17,7 @@
 
    Et elle n'est PAS variable, contrairement aux deux autres : Google en rend
    un fichier par graisse. On ne demande donc que les graisses réellement
-   posées par base.css — 700 pour h2/h3 et 900 pour le h1 — et aucune autre.
+   posées par base.css (700 pour h2/h3, 900 pour le h1), et aucune autre.
    Déclarer une plage 400–900 sur un fichier unique laisserait le navigateur
    synthétiser un faux gras, ce qui se voit immédiatement sur un mincho. */
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -72,7 +72,7 @@ for (const { file, query, weights } of FAMILIES) {
     const buf = Buffer.from(await fetch(url).then((r) => r.arrayBuffer()));
     await writeFile(new URL(`${name}.woff2`, OUT), buf);
     total += buf.length;
-    console.log(`${name}.woff2 — ${(buf.length / 1024).toFixed(1)} Kio`);
+    console.log(`${name}.woff2 · ${(buf.length / 1024).toFixed(1)} Kio`);
   }
 }
 

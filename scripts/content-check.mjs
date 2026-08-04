@@ -8,7 +8,7 @@
    ① Les fuites. Le numéro de téléphone ne doit jamais apparaître en clair, et
      aucune origine tierce ne doit être appelée. Ces deux règles vivaient dans
      des étapes shell de la CI chez Lionel, donc hors de `pnpm verify`, donc
-     hors du workflow de déploiement — une régression aurait été publiée, et la
+     hors du workflow de déploiement : une régression aurait été publiée, et la
      CI aurait rougi quelques minutes plus tard, après publication. Ici la
      porte se ferme avant le déploiement.
 
@@ -111,7 +111,7 @@ for (const { nom, re, zone } of STRUCTURES) {
     if (!zone) return html;
     const m = html.match(zone);
     if (!m) {
-      fail(`zone « ${nom} » introuvable — le motif a dérivé du balisage`);
+      fail(`zone « ${nom} » introuvable, le motif a dérivé du balisage`);
       return '';
     }
     return m[1];
@@ -119,7 +119,7 @@ for (const { nom, re, zone } of STRUCTURES) {
   const a = count(slice(fr), re);
   const b = count(slice(en), re);
   if (a !== b) fail(`parité FR/EN : ${a} ${nom} en français, ${b} en anglais`);
-  else if (a === 0) fail(`aucun élément trouvé pour « ${nom} » — le motif a dérivé du balisage`);
+  else if (a === 0) fail(`aucun élément trouvé pour « ${nom} », le motif a dérivé du balisage`);
   else console.log(`ok   ${nom} : ${a} des deux côtés`);
 }
 
@@ -133,6 +133,52 @@ for (const [nom, html, lang] of [
   if (!new RegExp(`<html lang="${lang}"`).test(html)) fail(`${nom} : attribut lang absent ou faux`);
 }
 console.log('ok   un seul h1 par page, attribut de langue correct');
+
+/* ── ④ typographie ────────────────────────────────────────────────────────
+   Sur les SOURCES, jamais sur dist/ : c'est ce qui est écrit qu'il faut
+   corriger, et une seule faute produirait sinon autant d'échecs que de pages
+   construites.
+
+   Le tiret cadratin est proscrit de tout le dépôt, copie du site comme
+   commentaires de code. Ce n'est PAS une règle de typographie française : en
+   français, ce tiret est parfaitement correct pour une incise. C'est une règle
+   de voix. Il est devenu le signe le plus reconnaissable d'un texte écrit par
+   une machine, et ce dépôt est public. Selon ce que le tiret faisait dans la
+   phrase, il se remplace par deux-points, une virgule, des parenthèses, ou par
+   une phrase coupée en deux.
+
+   Le caractère lui-même n'est jamais écrit en clair ici, seulement construit
+   par `fromCharCode` : sinon ce fichier se signalerait, et la porte ne
+   pourrait plus jamais sortir à zéro.
+
+   docs/ reste hors périmètre : les spécifications sont des documents de
+   travail datés, pas la voix publiée du site. */
+const CADRATIN = String.fromCharCode(0x2014);
+const TYPO = [
+  { motif: new RegExp(CADRATIN), quoi: 'tiret cadratin' },
+  /* Double tiret employé comme tiret de prose. Les tirets d'options
+     (--frozen-lockfile) et les propriétés personnalisées CSS (--tx3) sont
+     collés à un mot et ne sont donc pas visés. */
+  { motif: /\s--\s/, quoi: 'double tiret employé comme tiret' },
+];
+/* Une ligne réduite à trois tirets est un séparateur de frontmatter, dans les
+   .astro comme dans les .md : jamais une faute. */
+const FRONTMATTER = /^\s*---\s*$/;
+
+for (const racine of ['src', 'scripts', 'tests', '.github']) {
+  for (const f of walk(racine)) {
+    if (/\.(woff2|png|ico|pdf)$/.test(f)) continue;
+    readFileSync(f, 'utf8')
+      .split(/\r?\n/)
+      .forEach((ligne, i) => {
+        if (FRONTMATTER.test(ligne)) return;
+        for (const { motif, quoi } of TYPO) {
+          if (motif.test(ligne)) fail(`typo ${rel(f)}:${i + 1} : ${quoi}`);
+        }
+      });
+  }
+}
+console.log('ok   typographie des sources');
 
 console.log(failed ? `\n${failed} échec(s) de contenu` : '\nLe contenu passe toutes les gardes');
 process.exit(failed ? 1 : 0);

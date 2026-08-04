@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-/* Le sélecteur de thème a trois états et non deux — système → clair → sombre —
+/* Le sélecteur de thème a trois états et non deux (système → clair → sombre),
    et c'est « système » le défaut. Ce cycle casse en silence de deux façons :
    la clé de stockage écrite quand elle devrait être effacée, et l'OS qui
    cesse d'être suivi une fois qu'on est repassé sur « système ». */
@@ -27,7 +27,7 @@ test('le thème cycle sur trois états et persiste', async ({ page }) => {
   await expect(html).toHaveAttribute('data-theme-pref', 'dark');
 
   // Troisième clic : retour à « système ». La clé doit être EFFACÉE, pas
-  // réécrite — sans quoi l'OS ne reprend jamais la main.
+  // réécrite, sans quoi l'OS ne reprend jamais la main.
   await btn.click();
   await expect(html).toHaveAttribute('data-theme-pref', 'system');
   expect(await page.evaluate(() => localStorage.getItem('theme'))).toBeNull();

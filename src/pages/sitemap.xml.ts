@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 
-/* Le site tient en deux pages indexables — l'accueil français et sa version
+/* Le site tient en deux pages indexables : l'accueil français et sa version
    anglaise. Un plan de site écrit à la main est ici plus honnête qu'une
    intégration : il n'y a rien à découvrir, et chaque <loc> passe par `site`
    d'astro.config.mjs, donc un changement de domaine n'en demande aucune

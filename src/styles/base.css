@@ -11,11 +11,11 @@
 /* Les trois familles sont servies depuis /fonts, sous-ensemble latin, un
    fichier et un poids par famille. Zen Old Mincho est une police japonaise :
    la famille complète pèse plusieurs mégaoctets de kana et de kanji dont ce
-   site n'affiche aucun glyphe. Seul le sous-ensemble latin est embarqué —
+   site n'affiche aucun glyphe. Seul le sous-ensemble latin est embarqué :
    c'est le poste d'économie le plus important du projet. */
 /* Zen Old Mincho n'est pas variable : deux fichiers, deux graisses, et pas de
    plage déclarée. Annoncer `font-weight: 400 900` sur un fichier unique ferait
-   synthétiser au navigateur un faux gras pour le h1 — sur un mincho, dont tout
+   synthétiser au navigateur un faux gras pour le h1. Sur un mincho, dont tout
    l'intérêt tient au contraste délié/plein, ça se voit au premier coup d'œil.
    700 porte h2, h3, la fiche et les projets ; 900 porte le seul h1 de la page. */
 @font-face {
@@ -72,7 +72,7 @@ body {
   position: relative;
 }
 
-/* Fibre de washi — pas de trame millimétrée, on est sur du papier fibreux.
+/* Fibre de washi : pas de trame millimétrée, on est sur du papier fibreux.
    La turbulence est très anisotrope (0.86 × 0.022) : c'est ce rapport qui
    donne des fibres couchées plutôt qu'un bruit uniforme. */
 body::before {
@@ -190,7 +190,7 @@ em {
 }
 
 /* Séparateur : une branche en travers de la page. Pleine largeur, sans
-   gouttière — une branche coupée net au milieu du papier montre son bout
+   gouttière. Une branche coupée net au milieu du papier montre son bout
    carré ; sortie du cadre, elle vient d'ailleurs.
    Les <svg> porteurs d'un rameau déclarent leur viewBox dans le balisage :
    sans elle, `height:auto` retombe sur les 150 px par défaut du SVG et le
@@ -534,7 +534,7 @@ h1 em {
 }
 
 /* Le libellé est posé sur le papier et coupe la ligne d'aujourd'hui plutôt que
-   de se faire barrer par elle — convention du dessin technique : l'annotation
+   de se faire barrer par elle, selon la convention du dessin technique : l'annotation
    interrompt le trait, jamais l'inverse. Il va à droite de la bande, et
    bascule à gauche (.flip) quand il n'y a plus de place à droite. Le choix est
    fait au build sur la seule géométrie, dans src/lib/quai.mjs. */
@@ -605,7 +605,7 @@ h1 em {
   z-index: 4;
 }
 
-/* 朱 le sceau — une fleur à cinq pétales, et il ne marque que la ligne
+/* 朱 le sceau : une fleur à cinq pétales, et il ne marque que la ligne
    d'aujourd'hui. C'est un hanko, pas un ornement : une seule chose à dire. */
 .seal {
   position: absolute;
@@ -618,7 +618,7 @@ h1 em {
   gap: 3px;
 }
 /* Pas de viewBox sur ce SVG : un <use> de symbole dans un SVG qui a son propre
-   viewBox se pose à l'origine du système, pas au centre — le sceau partirait
+   viewBox se pose à l'origine du système, pas au centre, et le sceau partirait
    en tache décalée. Sans viewBox, le symbole remplit exactement l'élément. */
 .seal svg {
   width: 38px;
@@ -724,7 +724,7 @@ h1 em {
   border: 1px dashed var(--sak-t);
 }
 
-/* ── bandeau d'autorité — sur lavis de fleur ─────────────────────────────── */
+/* ── bandeau d'autorité, sur lavis de fleur ─────────────────────────────── */
 .auth {
   background: var(--wash);
   border-block: 1px solid var(--bd);
@@ -809,7 +809,7 @@ section:nth-of-type(3n) .sec-head .bl {
   color: var(--tx);
 }
 
-/* Fiche d'escale — portée unique : tout vaut pour la carrière entière. */
+/* Fiche d'escale, de portée unique : tout vaut pour la carrière entière. */
 .fiche {
   margin-top: clamp(1.8rem, 3.5vw, 2.6rem);
   border: 1.5px solid var(--tx);
@@ -882,7 +882,7 @@ section:nth-of-type(3n) .sec-head .bl {
   max-width: 52ch;
 }
 
-/* Le fil — sur lavis de fleur. */
+/* Le fil, sur lavis de fleur. */
 .fil {
   margin-top: clamp(1.8rem, 3.5vw, 2.6rem);
   background: var(--wash);
@@ -1074,7 +1074,7 @@ section:nth-of-type(3n) .sec-head .bl {
   color: var(--tx2);
 }
 
-/* Contact — surface inversée, hanami de nuit. */
+/* Contact, surface inversée, hanami de nuit. */
 .contact {
   background: var(--inv-bg);
   color: var(--inv-tx);

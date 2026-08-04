@@ -25,7 +25,7 @@ test('le plan est rendu sans JavaScript', async ({ browser }) => {
      dans le DOM et invisibles à l'écran.
 
      L'attente est indispensable et n'est pas du confort : l'accostage part
-     à 0,3 s et dure 1,1 s, et il est en CSS pur — il se joue donc aussi
+     à 0,3 s et dure 1,1 s, et il est en CSS pur : il se joue donc aussi
      lorsque JavaScript est coupé, ce qui est précisément ce que ce test
      vérifie. Mesurer tout de suite après `goto` mesure le début de
      l'animation, pas son résultat. */

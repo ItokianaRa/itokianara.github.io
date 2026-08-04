@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 /* Les parcours qui cassent en silence. On ne teste pas ce qu'un coup d'œil
-   rattrape — une couleur, un espacement — mais ce qui se dégrade sans que
+   rattrape (une couleur, un espacement), mais ce qui se dégrade sans que
    personne ne le voie : une ancre morte, un CV qui ne se télécharge plus, un
    numéro reparu en clair dans la source. */
 
@@ -11,15 +11,15 @@ for (const [lang, path] of [
   ['fr', '/'],
   ['en', '/en/'],
 ] as const) {
-  test(`${lang} — chaque lien de navigation atteint sa section`, async ({ page }) => {
+  test(`${lang} · chaque lien de navigation atteint sa section`, async ({ page }) => {
     await page.goto(path);
     for (const id of SECTIONS) {
       const target = page.locator(`#${id}`);
       await expect(target, `#${id} doit exister sur la page ${lang}`).toHaveCount(1);
       /* Le lien est cherché DANS la navigation, et non sur la page entière :
          « #contact » est aussi la cible du second bouton du hero, et un
-         `toHaveCount(1)` global échouait sur cette seconde occurrence — qui
-         est voulue, c'est la bifurcation par audience. */
+         `toHaveCount(1)` global échouait sur cette seconde occurrence, qui
+         est voulue : c'est la bifurcation par audience. */
       await expect(page.locator(`.nav a[href="#${id}"]`)).toHaveCount(1);
     }
   });
@@ -34,7 +34,7 @@ test("le CV se télécharge, et c'est bien un PDF", async ({ page, request }) =>
   expect(res.status()).toBe(200);
   /* Les quatre premiers octets d'un PDF valide. Vérifier le seul code 200
      laisserait passer une page d'erreur servie en 200, ou un fichier tronqué
-     par un dépôt partiel — deux pannes déjà vues sur GitHub Pages. */
+     par un dépôt partiel, deux pannes déjà vues sur GitHub Pages. */
   expect((await res.body()).subarray(0, 4).toString('latin1')).toBe('%PDF');
 });
 

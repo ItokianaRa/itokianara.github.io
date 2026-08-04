@@ -2,7 +2,7 @@
    La géométrie n'est pas dessinée : elle est calculée depuis les dates.
    Corriger une date suffit à redessiner le plan, et la bande du Ministère
    grossit d'elle-même à chaque construction. C'est ce qui rend le plan
-   honnête — longueur ∝ durée, sans exception.
+   honnête : longueur ∝ durée, sans exception.
 
    Différence avec la maquette : là-bas tout était bâti par du JavaScript au
    chargement, donc payé par chaque visiteur et invisible sans JS. Ici le même
@@ -41,7 +41,7 @@ export const LANES = [
     role: 'ymb',
     bars: [
       // Mars–avril 2021 : deux mois, avant les missions internationales. Trop
-      // courte pour porter un libellé — la bande se lit par sa position sur
+      // courte pour porter un libellé : la bande se lit par sa position sur
       // le poste et par le filet d'armateur qui part d'elle.
       { id: 'bici21', from: [2021, 3], to: [2021, 5] },
       { id: 'spat', from: [2023, 2], to: [2024, 2], inside: false },
@@ -109,7 +109,7 @@ export function quai(now = monthOf()) {
         months: Math.round((width / 100) * span),
         /* Le libellé posé sur le papier va à droite de la bande, et bascule à
            gauche quand il n'y a plus de place à droite. Décidé ici sur la
-           seule géométrie — aucune mesure de texte n'entre dans ce choix,
+           seule géométrie. Aucune mesure de texte n'entre dans ce choix,
            donc il est stable d'une langue à l'autre. */
         flip: left + width > 55,
         /* L'accostage se joue bande par bande, de la plus ancienne à la plus
@@ -135,7 +135,7 @@ export function quai(now = monthOf()) {
     },
     /* Le poste libre porte ses bourgeons : c'est la branche qui n'a pas encore
        fleuri, et le seul endroit du plan où la fleur est dessinée. Deux
-       bourgeons fermés et une seule fleur ouverte — la branche est en train de
+       bourgeons fermés et une seule fleur ouverte : la branche est en train de
        s'ouvrir, elle ne l'est pas déjà. */
     buds: [
       { left: 18, top: 26, size: 7, kind: 'bud', rotate: -18 },
