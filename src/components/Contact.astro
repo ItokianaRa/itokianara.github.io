@@ -1,10 +1,9 @@
 ---
 import { t, type Lang } from '../i18n/utils';
+import { NEXTRI } from '../lib/links.mjs';
 
 const { lang } = Astro.props as { lang: Lang };
 const s = t(lang);
-
-const NEXTRI = 'https://nextrimg.github.io/nextri_portfolio/';
 
 /* L'adresse est écrite en entités numériques : elle se lit et se copie
    exactement comme du texte, y compris sans JavaScript, mais elle n'apparaît

@@ -66,6 +66,16 @@ const FUITES = [
     test: (txt) => /linkedin\.com|github\.com\/(?!ItokianaRa\/)/i.test(txt),
     quoi: 'lien vers un profil social',
   },
+  {
+    /* L'ancienne adresse de NEXTRI, du temps où le collectif publiait depuis
+       un dépôt de projet. Il a basculé sur un site d'utilisateur servi à la
+       racine, et ce chemin rend désormais une 404. Le site portait les deux
+       occurrences, dans Who.astro et Contact.astro, et rien ne l'a signalé :
+       un lien sortant cassé ne casse aucune construction. C'est exactement ce
+       qu'une porte doit attraper. */
+    test: (txt) => /nextrimg\.github\.io\/nextri_portfolio/i.test(txt),
+    quoi: 'ancienne adresse de NEXTRI (404 depuis le passage en site utilisateur)',
+  },
 ];
 
 for (const file of walk('dist')) {

@@ -1,13 +1,14 @@
 ---
 import { t, type Lang } from '../i18n/utils';
-
-const { lang } = Astro.props as { lang: Lang };
-const s = t(lang);
+import { NEXTRI } from '../lib/links.mjs';
 
 /* Le lien NEXTRI vit ici, dans le premier mouvement, et pas seulement en pied
    de page : la passerelle vers le collectif fait partie de ce qu'Itokiana
-   propose, pas d'une mention légale. */
-const NEXTRI = 'https://nextrimg.github.io/nextri_portfolio/';
+   propose, pas d'une mention légale. L'adresse elle-même est dans
+   src/lib/links.mjs, déclarée une seule fois. */
+
+const { lang } = Astro.props as { lang: Lang };
+const s = t(lang);
 ---
 
 <section class="blk wrap" id="qui">
