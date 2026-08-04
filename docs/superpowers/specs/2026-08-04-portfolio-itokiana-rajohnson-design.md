@@ -1,9 +1,9 @@
-# Portfolio Itokiana Rajohnson — spec
+# Portfolio Itokiana Rajohnson · spec
 
 **Date** : 4 août 2026 · **Statut** : conception validée, implémentée
 **Maquette de référence** : `.unwanted/preview.html` (D.A. « document de printemps », cerisier)
 **Sources factuelles** : `.unwanted/about/masters/CV_Itokiana_Rajohnson_MASTER.md` (21/07/2026)
-**Socle repris de** : `E:\Dev\lionel-ratovo-portfolio` — même stack, mêmes portes de vérification
+**Socle repris de** : `E:\Dev\lionel-ratovo-portfolio` : même stack, mêmes portes de vérification
 
 ---
 
@@ -24,7 +24,7 @@
 Lionel a coûté cher parce qu'il a été construit de zéro en découvrant chaque
 décision au fil de l'eau. Ici le socle est déjà payé : thème, i18n, mouvement,
 portes de vérification, CI. Seuls diffèrent les jetons, les polices, la pièce
-maîtresse et le contenu. Aucun super-PRD n'a été rédigé pour ce projet — ce
+maîtresse et le contenu. Aucun super-PRD n'a été rédigé pour ce projet ; ce
 document tient lieu de trace, et le code porte le reste en commentaires.
 
 ---
@@ -47,7 +47,7 @@ ce qui n'aurait pas été le cas d'un angle « architecte ».
 « elle code moins ». Chaque affirmation de conduite est donc ancrée dans un
 fait technique nommé, et la section 03 est entièrement faite de livraisons.
 
-## 2. Règles de contenu — non négociables
+## 2. Règles de contenu, non négociables
 
 Reprises du CV maître et étendues au site. Elles priment sur toute
 considération esthétique.
@@ -55,7 +55,7 @@ considération esthétique.
 1. **Aucun chiffre indéfendable en entretien technique.**
 2. **Aucune capture d'écran** du SIF, du SIGFU, ni des comptes Mercedes-Benz,
    Smart ou Pampers : systèmes d'État et comptes clients d'agence.
-3. **Aucun projet fictif**, aucune démo simulée, **aucun profil social** — le CV
+3. **Aucun projet fictif**, aucune démo simulée, **aucun profil social**. Le CV
    maître n'en mentionne aucun, en afficher un serait un fait fabriqué.
 4. **Aucun compteur de vanité.**
 5. **Là où la source est muette, le site est muet.** Ketrika, Vidy Varotra et
@@ -70,7 +70,7 @@ considération esthétique.
 Le problème est le même que chez Lionel : **un portfolio de développeuse sans
 une seule capture d'écran**. Le vide visuel est le vrai risque.
 
-La réponse est le cerisier, dessiné et jamais écrit — pas d'idéogramme, parce
+La réponse est le cerisier, dessiné et jamais écrit, sans idéogramme, parce
 qu'un caractère qu'on ne sait pas lire est un décor exotique alors qu'une fleur
 se lit sans traduction.
 
@@ -80,7 +80,7 @@ se lit sans traduction.
   échelles variant de 3 % : une fleur vraie n'est pas symétrique, et l'œil lit
   la symétrie parfaite comme du gabarit.
 - **Rameau fuselé** en séparateur, pleine largeur, sortant du cadre.
-- **Sceau** — un hanko en fleur, qui ne marque que la ligne d'aujourd'hui.
+- **Sceau** : un hanko en fleur, qui ne marque que la ligne d'aujourd'hui.
 - **Lavis de fleur** (`--wash`) sur deux surfaces seulement.
 
 ### La pièce maîtresse : le plan de quai
@@ -104,7 +104,7 @@ sans qu'une ligne du CV ait bougé.
 
 Le **poste libre** est un hameçon d'inachèvement, coté à la même échelle que le
 travail réel, et il porte la passerelle NEXTRI. C'est le seul endroit du plan
-où la fleur est dessinée : deux bourgeons fermés, une seule fleur ouverte — la
+où la fleur est dessinée : deux bourgeons fermés, une seule fleur ouverte : la
 branche est en train de s'ouvrir, elle ne l'est pas déjà.
 
 **Écart assumé avec la maquette.** Là-bas le plan était construit en JavaScript
@@ -118,7 +118,7 @@ impossible au build. Elle est donc **déclarée** (`inside: true|false`) puis
 
 ## 4. Couleur
 
-Quatre couleurs de terrain, et elles portent du sens — c'est la seule chose que
+Quatre couleurs de terrain, et elles portent du sens. C'est la seule chose que
 le rose ne prend pas. Chacune est dédoublée graphique / texte, comme chez
 Lionel : `--kon` pour les aplats, `--kon-t` pour le texte, assombrie jusqu'à
 franchir 4,5:1 sur la pire surface du thème.
@@ -131,7 +131,7 @@ franchir 4,5:1 sur la pire surface du thème.
 | `--sak` 灰桜 | Le poste libre, et l'ornement |
 | `--shu` 朱 | Le sceau, l'action, la ligne d'aujourd'hui |
 
-Le rose est un rose de teinture ancienne — *haizakura*, cendré — et non un rose
+Le rose est un rose de teinture ancienne, *haizakura*, cendré, et non un rose
 bonbon : chroma basse, teinte vers la terre cuite, il se pose sur le papier
 crème sans crier.
 
@@ -143,7 +143,7 @@ sombre passait à 4,27:1 sous le libellé posé dans la bande du SIF. Éclairci 
 
 | Rôle | Famille | Poids servis |
 |---|---|---|
-| Titres | **Zen Old Mincho** | 700, 900 — **deux fichiers, famille non variable** |
+| Titres | **Zen Old Mincho** | 700, 900 : **deux fichiers, famille non variable** |
 | Corps | **Archivo** | variable 400–600, un fichier |
 | Faits, cotes | **JetBrains Mono** | variable 400–500, un fichier |
 
@@ -153,7 +153,7 @@ première phrase ajoutée réintroduirait le défaut en silence.
 
 **Zen Old Mincho justifie le script à elle seule** : famille japonaise de
 plusieurs mégaoctets dont le site n'affiche aucun glyphe. Et elle n'est **pas
-variable** — déclarer `font-weight: 400 900` sur un fichier unique ferait
+variable**. Déclarer `font-weight: 400 900` sur un fichier unique ferait
 synthétiser un faux gras pour le `h1`, ce qui se voit immédiatement sur un
 mincho.
 
@@ -165,12 +165,12 @@ Mesuré : **97 Kio** pour les trois familles, budget 110 Kio, vérifié par
 `ease-out-expo` partout, aucun rebond. Rien n'anime de propriété de mise en
 page : `transform`, `opacity`, `clip-path` seulement.
 
-- **① Entrée** — l'accostage des bandes, du plus ancien au plus récent, puis
+- **① Entrée** : l'accostage des bandes, du plus ancien au plus récent, puis
   les libellés, puis le sceau qui tombe. C'est le pic. Animation CSS pure,
   donc elle se joue aussi sans JavaScript.
-- **② Défilement** — timelines CSS natives (`animation-timeline: view()`), avec
+- **② Défilement** : timelines CSS natives (`animation-timeline: view()`), avec
   repli `IntersectionObserver` pour Firefox et Safari.
-- **③ Amortissement** — implémentation maison, sans dépendance, souris
+- **③ Amortissement** : implémentation maison, sans dépendance, souris
   uniquement, coupée par `prefers-reduced-motion`.
 
 Tout le fichier vit sous `prefers-reduced-motion: no-preference`.
@@ -186,7 +186,7 @@ trouvé.
 ### Le favicon
 
 Tuile de papier crème, **l'initiale d'Itokiana en encre**, filet vermillon en
-pied — les trois couleurs du thème clair, et la lettre composée dans Zen Old
+pied. Les trois couleurs sont celles du thème clair, et la lettre composée dans Zen Old
 Mincho, la police de titre du site. Le favicon est un fragment de la page, pas
 un logo posé à côté.
 
@@ -198,7 +198,7 @@ rendu à 16, 32 et 48 px, pas déduit.
 
 Deux drapeaux Chromium sont indispensables au rendu (`scripts/icons.mjs`) :
 `--disable-lcd-text`, sans quoi le crénelage sous-pixel dépose des franges
-orange et bleues le long des jambages — justes sur une dalle RVB dans cet
+orange et bleues le long des jambages, justes sur une dalle RVB dans cet
 ordre, parasites partout ailleurs ; et `--force-color-profile=srgb`, sans quoi
 les trois couleurs dérivent selon l'écran de la machine qui lance le script.
 
@@ -221,7 +221,7 @@ branchée dans **les deux** workflows.
 Playwright, Chromium et Firefox, 24 cas :
 
 1. Chaque lien de navigation atteint sa section, dans les deux langues.
-2. Le CV se télécharge et commence bien par `%PDF` — un 200 seul laisserait
+2. Le CV se télécharge et commence bien par `%PDF` : un 200 seul laisserait
    passer une page d'erreur ou un fichier tronqué.
 3. Le numéro est absent de la source et révélé au clic.
 4. La bascule de langue mène à la page équivalente, jamais à l'accueil.
@@ -232,7 +232,7 @@ Playwright, Chromium et Firefox, 24 cas :
    défile jamais horizontalement.
 
 **Pas de tests unitaires.** Il n'y a pas de logique à tester sur un site de
-contenu, hors la géométrie du plan — et celle-là a sa propre porte.
+contenu, hors la géométrie du plan, et celle-là a sa propre porte.
 
 ## 9. Ce qui reste ouvert
 
