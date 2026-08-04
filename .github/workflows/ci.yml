@@ -3,6 +3,11 @@ on: [push, pull_request]
 jobs:
   verify:
     runs-on: ubuntu-latest
+    # Une borne dure. Sans elle, une étape qui attend un verrou système attend
+    # jusqu'au plafond de six heures de GitHub, sans rien afficher : le job
+    # n'échoue pas, il dort, et on croit qu'il travaille. Quinze minutes est
+    # large — le job complet tourne en trois à quatre.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -14,14 +19,41 @@ jobs:
       # là, n'ajoute pas de drapeau ici pour contourner le blocage.
       - run: pnpm install --frozen-lockfile
       # La même porte qu'en local : lint, check, build, contrast, quai,
-      # budget, content. Elle passe avant l'installation des navigateurs, qui coûte
-      # plusieurs minutes : une faute de lint ou un dépassement de budget
+      # budget, content. Elle passe avant l'installation des navigateurs, qui
+      # coûte plusieurs minutes : une faute de lint ou un dépassement de budget
       # doit rougir tout de suite, et non après le téléchargement de deux
       # moteurs. `pnpm test` reconstruira ensuite le site par le `webServer`
       # de playwright.config.ts ; cette seconde construction est voulue,
       # c'est elle qui garantit que les tests mesurent ce qui est expédié.
       - run: pnpm run verify
-      - run: pnpm exec playwright install --with-deps chromium firefox
+
+      # Les deux moteurs sont mis en cache, indexés sur la version exacte de
+      # @playwright/test : c'est elle qui décide des révisions de navigateurs
+      # téléchargées, donc un changement de version doit invalider le cache et
+      # rien d'autre ne le doit.
+      - id: pw
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+
+      # SANS `--with-deps`, et c'est délibéré. Ce drapeau lance un
+      # `sudo apt-get update && apt-get install` avant tout téléchargement.
+      # Sur un runner GitHub, `unattended-upgrades` tourne au démarrage de la
+      # machine et tient le verrou dpkg : apt attend alors ce verrou sans
+      # limite et sans rien écrire, et l'étape paraît bloquée — relevé le
+      # 04/08/2026. Or l'image `ubuntu-latest` embarque déjà Chrome et Firefox,
+      # donc leurs bibliothèques partagées : `--with-deps` réinstalle ce qui
+      # est là.
+      #
+      # Si un jour une bibliothèque manque vraiment, l'échec est explicite et
+      # immédiat (Playwright nomme le .so absent au lancement du moteur) : il
+      # sera temps d'installer ce paquet-là, pas toute la liste.
+      - if: steps.pw-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install chromium firefox
+
       - run: pnpm test
       # L'étape shell qui cherchait les liens sociaux et le numéro en clair
       # dans dist/ a disparu d'ici : elle est devenue scripts/content-check.mjs,
