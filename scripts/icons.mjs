@@ -3,31 +3,35 @@
  *
  *   pnpm run icons
  *
- * Le dessin : une tuile de papier crème, l'initiale d'Itokiana en encre, un
- * filet vermillon en pied. Les trois couleurs sont celles du thème clair, et
- * la lettre est composée dans la police de titre du site — le favicon est donc
- * un fragment de la page, pas un logo posé à côté.
+ * LE DESSIN : une fleur de cerisier, et l'initiale d'Itokiana en son cœur.
  *
- * POURQUOI UNE LETTRE, alors que la première version portait une fleur.
- * L'objection tenait : dans 16 px, un « I » est une barre verticale, et rien
- * ne la distingue d'un filet. Elle tombe avec Zen Old Mincho. C'est un mincho,
- * donc un caractère à empattements : son « I » capital porte deux fortes
- * barres horizontales, en tête et en pied. La silhouette obtenue est un H
- * couché, large et refermé — reconnaissable là où un « I » de grotesque ne
- * l'est pas. Vérifié au rendu, pas déduit.
+ * La forme de l'icône EST la thématique, et c'est le principe repris du jeu
+ * d'icônes de Lionel. Chez lui, le favicon est un carré parce que sa direction
+ * artistique est la planche cadastrale : le carré n'est pas un cadre, c'est une
+ * parcelle. Poser la même tuile carrée ici en aurait fait un contenant neutre,
+ * et le cerisier n'aurait plus tenu qu'à une couleur. La fleur est donc
+ * découpée à même le canevas, sans fond : ce sont ses cinq pétales échancrés
+ * qui portent le sens, et la lettre vient s'y loger.
  *
- * Le cerisier ne disparaît pas pour autant : il reste dans le papier crème,
- * dans le filet vermillon du sceau, et dans le dessin même de la lettre.
+ * La géométrie de la fleur est EXACTEMENT celle de Sprite.astro : mêmes angles
+ * inégaux (70°/76°/68°/74°/72°), mêmes échelles à 3 % près, même bascule de
+ * −8°. Une fleur vraie n'est pas symétrique, et l'œil lit la symétrie parfaite
+ * comme du gabarit.
+ *
+ * LA LETTRE tient dans le cœur, là où les cinq pétales se recouvrent et où la
+ * matière est pleine. Elle est composée dans Zen Old Mincho, la police de titre
+ * du site. Le choix du mincho n'est pas décoratif : ses empattements donnent au
+ * « I » capital deux fortes barres horizontales, en tête et en pied. La
+ * silhouette est large et refermée, là où un « I » de grotesque serait une
+ * barre verticale indistinguable dans 16 px. Vérifié au rendu, pas déduit.
  *
  * LA CONTRAINTE TECHNIQUE, héritée du jeu d'icônes de Lionel : une
  * `@font-face` déclarée dans le document hôte ne traverse pas un SVG chargé en
- * `data:` URI — la lettre y retombe sur une police de substitution. La tuile
- * est donc dessinée en HTML, où la police est réellement appliquée, et
- * Chromium rasterise via Playwright, déjà présent pour les tests. Aucune
- * dépendance de rendu d'image n'est ajoutée au projet.
- *
- * La police est embarquée en base64 dans la page : le sous-ensemble latin
- * contient « I », et c'est le même fichier que sert le site.
+ * `data:` URI, et la lettre y retombe sur une police de substitution. La fleur
+ * est donc un SVG en ligne et la lettre un vrai nœud de texte HTML posé
+ * par-dessus, dans un document où la police est réellement appliquée. Chromium
+ * rasterise via Playwright, déjà présent pour les tests : aucune dépendance de
+ * rendu d'image n'est ajoutée au projet.
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
@@ -41,46 +45,78 @@ const PUBLIC = join(ROOT, 'public');
    pas s'inverser selon le thème du visiteur : il est figé, et le papier crème
    est ce qui le détache aussi bien sur un onglet clair que sur un onglet
    sombre. Une tuile encre disparaîtrait dans un onglet sombre. */
-const PAPER = '#faf5ec';
+const PETAL = '#c08894';
 const INK = '#23201e';
-const SHU = '#c9432e';
+
+/* Le tracé d'un pétale, copié de Sprite.astro : taille étroite, ventre large,
+   échancrure au sommet. C'est l'échancrure qui fait qu'on reconnaît un
+   cerisier et pas une marguerite. */
+const PETALE =
+  'M0 1.1 C-2.7-1.3 -5.5-4.4 -5.6-8.1 C-5.7-11.1 -3.9-13.1 -1.9-12.8 ' +
+  'C-1-12.6 -.35-11.6 0-9.5 C.35-11.6 1-12.6 1.9-12.8 C3.9-13.1 5.7-11.1 5.6-8.1 ' +
+  'C5.5-4.4 2.7-1.3 0 1.1 Z';
+
+const POSES = [
+  '',
+  'rotate(70) scale(.97,1.03)',
+  'rotate(146) scale(1.03,.98)',
+  'rotate(214) scale(.98,1.01)',
+  'rotate(288) scale(1.02,.99)',
+];
+
+const fleurSvg = (px) =>
+  `<svg width="${px}" height="${px}" viewBox="-14 -14 28 28" xmlns="http://www.w3.org/2000/svg">` +
+  `<g fill="${PETAL}" transform="rotate(-8) scale(1,.96)">` +
+  POSES.map((p) => `<path d="${PETALE}"${p ? ` transform="${p}"` : ''}/>`).join('') +
+  '</g></svg>';
 
 /**
- * `lettre` : hauteur de la police en fraction du côté. `filet` : hauteur du
- * filet en pied.
+ * `fleur` : diamètre de la fleur en fraction du côté.
+ * `lettre` : corps de la police en fraction du côté.
  *
- * La lettre grossit dans les petites tailles : à 16 px, chaque pixel de
- * hampe compte, et les empattements doivent rester au moins à un pixel plein
- * pour que la silhouette tienne. À 180 px, elle respire au contraire.
+ * Le rapport lettre/fleur n'est PAS constant, et c'est le seul réglage qui
+ * demande de l'œil ici. Il monte quand la taille baisse : à 48 px, une lettre
+ * à 0,44 laisse voir les cinq échancrures et la fleur se lit comme une fleur ;
+ * à 16 px, ces échancrures tombent sous le pixel de toute façon, la fleur
+ * devient une pastille ronde, et c'est alors la LETTRE qui doit porter
+ * l'identification. Un premier essai gardait 0,50 partout : à 16 px, les
+ * empattements tombaient sous le pixel et le « I » se réduisait à une tache
+ * verticale.
  *
  * Pas d'icône 192, 512 ni maskable : ce site n'a pas de manifeste, donc rien
  * ne les référencerait. Le jour où il en gagne un, les ajouter ici ; la
- * maskable devra rétrécir sa lettre aux 80 % centraux (zone sûre d'Android)
- * tout en gardant la tuile à fond perdu.
+ * maskable devra tenir dans les 80 % centraux (zone sûre d'Android), et
+ * demandera un aplat derrière la fleur puisque Android impose un fond plein.
  */
 const TARGETS = [
-  { file: 'favicon-16.png', size: 16, lettre: 0.86, filet: 0.16 },
-  { file: 'favicon-32.png', size: 32, lettre: 0.82, filet: 0.16 },
-  { file: 'favicon-48.png', size: 48, lettre: 0.8, filet: 0.16 },
-  // iOS arrondit les coins : la lettre s'écarte un peu plus des bords.
-  { file: 'apple-touch-icon.png', size: 180, lettre: 0.7, filet: 0.13 },
+  { file: 'favicon-16.png', size: 16, fleur: 1, lettre: 0.64 },
+  { file: 'favicon-32.png', size: 32, fleur: 1, lettre: 0.52 },
+  { file: 'favicon-48.png', size: 48, fleur: 1, lettre: 0.46 },
+  // iOS arrondit les coins : la fleur rentre un peu pour ne pas s'y faire
+  // rogner les pétales.
+  { file: 'apple-touch-icon.png', size: 180, fleur: 0.88, lettre: 0.4 },
 ];
 
 /** Le .ico embarque trois PNG : licite depuis Vista, lu par tous les navigateurs. */
 const ICO_SIZES = [16, 32, 48];
 
-function page(font, { size, lettre, filet }) {
+function page(font, { size, fleur, lettre }) {
   return `<!doctype html><meta charset="utf-8"><style>
     @font-face{font-family:Mincho;src:url(data:font/woff2;base64,${font}) format('woff2');font-weight:900}
-    html,body{margin:0;padding:0;width:${size}px;height:${size}px}
-    .tuile{position:relative;width:${size}px;height:${size}px;background:${PAPER};overflow:hidden}
-    .l{position:absolute;inset:0;display:grid;place-items:center;
-       /* Remontée optique : le filet pèse en bas, la lettre doit s'en écarter. */
-       padding-bottom:${(filet * 1.6 * 100).toFixed(2)}%;
-       font-family:Mincho;font-weight:900;font-size:${(lettre * size).toFixed(2)}px;
-       line-height:1;color:${INK}}
-    .filet{position:absolute;left:0;right:0;bottom:0;height:${(filet * 100).toFixed(2)}%;background:${SHU}}
-  </style><div class="tuile"><div class="l">I</div><div class="filet"></div></div>`;
+    /* Aucun fond : le canevas reste transparent et c'est la silhouette de la
+       fleur qui découpe l'icône. Un aplat carré derrière elle en referait le
+       contenant neutre qu'on cherche justement à éviter. */
+    html,body{margin:0;padding:0;width:${size}px;height:${size}px;background:transparent}
+    .mark{position:relative;width:${size}px;height:${size}px;display:grid;place-items:center}
+    .mark svg{position:absolute;inset:0;margin:auto}
+    .l{position:relative;font-family:Mincho;font-weight:900;
+       font-size:${(lettre * size).toFixed(2)}px;line-height:1;color:${INK};
+       /* Le cœur de la fleur n'est pas au centre géométrique du canevas : le
+          groupe est basculé de −8° et écrasé à .96 en hauteur, ce qui fait
+          remonter la zone de recouvrement des cinq pétales. Sans cette
+          correction, la lettre mord l'échancrure du pétale du bas. */
+       transform:translateY(${(size * 0.02).toFixed(2)}px)}
+  </style><div class="mark">${fleurSvg((fleur * size).toFixed(2))}<span class="l">I</span></div>`;
 }
 
 function ico(entries) {
@@ -131,7 +167,7 @@ for (const target of TARGETS) {
      de substitution, et l'icône part avec un « I » de grotesque — c'est
      exactement le défaut que ce script existe pour éviter. */
   await p.evaluate(() => document.fonts.load('900 100px Mincho').then(() => document.fonts.ready));
-  const png = await p.screenshot();
+  const png = await p.screenshot({ omitBackground: true });
   await p.close();
   await writeFile(join(PUBLIC, target.file), png);
   rendered.set(target.size, png);
