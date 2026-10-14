@@ -16,6 +16,7 @@
     "test": "playwright test",
     "verify": "pnpm run lint && pnpm run check && pnpm run build && pnpm run contrast && pnpm run quai && pnpm run budget && pnpm run content",
     "icons": "node scripts/icons.mjs",
+    "cv": "node scripts/cv.mjs",
     "fonts": "node scripts/fonts.mjs"
   },
   "packageManager": "pnpm@11.5.2",
