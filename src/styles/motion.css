@@ -76,8 +76,9 @@
      titre d'un côté, pastille et chapeau de l'autre. Deux systèmes de classes
      venus de deux sources (la maquette et la couche de mouvement) qui se
      partagent un nom de deux lettres : ne pas réintroduire `.in` ici. */
+  /* Le héros porte le LCP : il entre en glissant, jamais en fondu. Un élément à
+     opacité 0 n'est pas peint, et le LCP attendait la fin du fondu. */
   .js-motion .stagger > * {
-    opacity: 0;
     transform: translateY(10px);
   }
   .js-motion .stagger.shown > * {
