@@ -107,18 +107,85 @@
 
   /* ── ② lié au défilement ──────────────────────────────────────────────── */
   @supports (animation-timeline: view()) {
+    /* Indirection : Lightning CSS fusionne sinon nimation et
+       nimation-timeline en un raccourci que Chrome rejette en bloc. */
+    :root {
+      --anim-tl-view: view();
+    }
+
+    /* Images clés propres au défilement, avec un `from` explicite : `rise` n'a
+       qu'un `to`, donc son départ est l'état de repos de `.rv`, déjà visible,
+       et la révélation ne bougeait pas d'un pixel sous Chrome. */
     .js-motion .rv {
-      animation: rise 1ms var(--ease) both;
-      animation-timeline: view();
+      animation: reveal linear both;
+      animation-timeline: var(--anim-tl-view);
       /* La plage commence tôt et finit tôt : un bloc est entièrement révélé
-         bien avant d'atteindre le centre de l'écran. Une plage qui court
-         jusqu'en haut du cadre donne un texte qui n'est jamais tout à fait
-         net, ce qui se lit comme un défaut d'affichage et non comme un
-         mouvement. */
-      animation-range: entry 8% cover 34%;
+         bien avant d'atteindre le centre de l'écran. */
+      animation-range: entry 6% cover 34%;
+    }
+    /* Titres de section : essuyage de gauche à droite, après le bloc */
+    .js-motion .sec-head h2 {
+      animation: wipe linear both;
+      animation-timeline: var(--anim-tl-view);
+      animation-range: entry 10% cover 38%;
+    }
+    /* Fiche d'escale et autres projets : les cellules montent l'une après l'autre */
+    .js-motion .fiche > div,
+    .js-motion .pgrid > article,
+    .js-motion .facts > span {
+      animation: reveal linear both;
+      animation-timeline: var(--anim-tl-view);
+      animation-range: entry 4% cover 30%;
+    }
+    .js-motion .fiche > div:nth-child(2),
+    .js-motion .pgrid > article:nth-child(2),
+    .js-motion .facts > span:nth-child(2) {
+      animation-range: entry 8% cover 36%;
+    }
+    .js-motion .fiche > div:nth-child(3),
+    .js-motion .pgrid > article:nth-child(3),
+    .js-motion .facts > span:nth-child(3) {
+      animation-range: entry 12% cover 42%;
+    }
+    .js-motion .fiche > div:nth-child(n + 4),
+    .js-motion .facts > span:nth-child(n + 4) {
+      animation-range: entry 16% cover 48%;
+    }
+    /* La branche dérive légèrement pendant sa traversée */
+    .js-motion .branch svg {
+      animation: drift linear both;
+      animation-timeline: var(--anim-tl-view);
+      animation-range: cover 0% cover 100%;
+    }
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    @keyframes wipe {
+      from {
+        clip-path: inset(0 100% 0 0);
+        opacity: 0.2;
+      }
+      to {
+        clip-path: inset(0 0 0 0);
+        opacity: 1;
+      }
+    }
+    @keyframes drift {
+      from {
+        transform: translateX(-2%);
+      }
+      to {
+        transform: translateX(2%);
+      }
     }
   }
-
   /* Repli pour Firefox et Safari, qui ne gèrent pas encore
      `animation-timeline`. motion.ts pose .in par IntersectionObserver. Ce
      n'est pas une dégradation visible : le site reste complet, seule la
@@ -126,10 +193,40 @@
   @supports not (animation-timeline: view()) {
     .js-motion .rv {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(24px);
     }
     .js-motion .rv.shown {
       animation: rise 0.7s var(--ease) forwards;
     }
   }
+}
+
+/* ═══ Mode statique (data-motion="lite", Base.astro) ═══════════════════════
+   Appareil sans accélération GPU.
+   Coupe ce qui force un repeint plein écran à chaque image : animations (dont
+   les timelines de défilement), fibre fixe en mix-blend-mode, flou de
+   l'en-tête. Les transitions de survol restent. */
+[data-motion="lite"] *,
+[data-motion="lite"] *::before,
+[data-motion="lite"] *::after {
+  animation: none !important;
+}
+/* États de départ de l'accostage, posés hors animation : état final */
+[data-motion="lite"] .bar {
+  transform: none !important;
+}
+[data-motion="lite"] .blabel,
+[data-motion="lite"] .buds .bl {
+  opacity: 0.9 !important;
+}
+[data-motion="lite"] .seal {
+  opacity: 1 !important;
+  transform: translateX(-50%) !important;
+}
+[data-motion="lite"] body::before {
+  display: none;
+}
+[data-motion="lite"] .hdr {
+  backdrop-filter: none;
+  background: var(--bg);
 }

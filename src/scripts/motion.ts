@@ -16,7 +16,10 @@
    son accostage est une animation CSS pure. C'est la différence de fond avec
    la maquette, où tout le plan était construit en JavaScript au chargement. */
 
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Mode statique (data-motion, Base.astro) traité comme un mouvement réduit.
+const reduce =
+  matchMedia('(prefers-reduced-motion: reduce)').matches ||
+  document.documentElement.dataset.motion === 'lite';
 const native = CSS.supports('animation-timeline: view()') && !reduce;
 
 for (const el of document.querySelectorAll('.stagger')) el.classList.add('shown');
