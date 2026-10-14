@@ -2,7 +2,7 @@
 // NSGFH → SGFH (nom employé par le cas SIF du portfolio de Lionel) ; Node → Node.js ;
 // web mastering → webmastering ; Phô restaurant → Phô Resto ; Master 2 MBDS → Master 2 MIAGE,
 // parcours MBDS (intitulé du portfolio) ; Licence Informatique → Licence en informatique ;
-// casse et ponctuation des intitulés harmonisées. Les gabarits (templates.mjs) ne font que la forme.
+// casse et ponctuation des intitulés harmonisées ; intitulés au féminin, comme le portfolio (2026-10-14). Les gabarits (templates.mjs) ne font que la forme.
 // Les numéros ne sont pas versionnés (dépôt public) : cv/private.mjs, gitignoré,
 // sur le modèle de cv/private.example.mjs. scripts/cv.mjs refuse de rendre sans lui.
 import priv from './private.mjs';
@@ -12,7 +12,7 @@ export default {
   last: 'RAJOHNSON RAKOTOVAO',
   first: 'Itokiana Mamy',
   short: 'Itokiana Rajohnson',
-  title: 'Développeur full-stack Java · Profil technico-fonctionnel',
+  title: 'Développeuse full-stack Java · Profil technico-fonctionnel',
   city: 'Antananarivo, Madagascar',
   phones: priv.phones,
   email: 'rajohnsonitokiana@gmail.com',
@@ -20,7 +20,7 @@ export default {
   site: 'itokianara.github.io',
   mobility: 'Disponible en remote ou en relocalisation',
   profile: [
-    "Développeur full-stack Java au profil technico-fonctionnel, avec plus de cinq ans d'expérience en IT : développement, estimation, rédaction de tickets et interface entre clients et équipes. J'ai contribué à des projets institutionnels et sectoriels variés (système d'information foncière, gestion portuaire, fonds routier, santé, ERP) à Madagascar, en Côte d'Ivoire et à Maurice, en environnement Agile (Scrum).",
+    "Développeuse full-stack Java au profil technico-fonctionnel, avec plus de cinq ans d'expérience en IT : développement, estimation, rédaction de tickets et interface entre clients et équipes. J'ai contribué à des projets institutionnels et sectoriels variés (système d'information foncière, gestion portuaire, fonds routier, santé, ERP) à Madagascar, en Côte d'Ivoire et à Maurice, en environnement Agile (Scrum).",
   ],
   figures: [
     ['5 ans+', 'en IT'],
@@ -30,7 +30,7 @@ export default {
   ],
   jobs: [
     {
-      title: 'Consultant développeur full-stack',
+      title: 'Consultante développeuse full-stack',
       company: 'IGN FI',
       period: "Janvier 2024 - Aujourd'hui",
       start: 2024,
@@ -66,7 +66,7 @@ export default {
       ],
     },
     {
-      title: 'Développeur Java et assistant chef de projet',
+      title: 'Développeuse Java et assistante cheffe de projet',
       company: 'BICI',
       period: 'Mars 2021 - Janvier 2024',
       start: 2021.2,
@@ -104,7 +104,7 @@ export default {
       ],
     },
     {
-      title: 'Consultant Lead Webmaster',
+      title: 'Consultante Lead Webmaster',
       company: 'RAPP IO Mauritius',
       period: 'Mai 2021 - Janvier 2023',
       start: 2021.4,
