@@ -28,7 +28,7 @@ for (const [lang, path] of [
 test("le CV se télécharge, et c'est bien un PDF", async ({ page, request }) => {
   await page.goto('/');
   const href = await page.locator('a[href$=".pdf"]').first().getAttribute('href');
-  expect(href).toBe('/cv/CV_Itokiana_Rajohnson.pdf');
+  expect(href).toBe('/cv/Itokiana_Rajohnson_CV.pdf');
 
   const res = await request.get(href as string);
   expect(res.status()).toBe(200);

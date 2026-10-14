@@ -3,6 +3,10 @@
 // web mastering → webmastering ; Phô restaurant → Phô Resto ; Master 2 MBDS → Master 2 MIAGE,
 // parcours MBDS (intitulé du portfolio) ; Licence Informatique → Licence en informatique ;
 // casse et ponctuation des intitulés harmonisées. Les gabarits (templates.mjs) ne font que la forme.
+// Les numéros ne sont pas versionnés (dépôt public) : cv/private.mjs, gitignoré,
+// sur le modèle de cv/private.example.mjs. scripts/cv.mjs refuse de rendre sans lui.
+import priv from './private.mjs';
+
 export default {
   file: 'Itokiana_Rajohnson',
   last: 'RAJOHNSON RAKOTOVAO',
@@ -10,7 +14,7 @@ export default {
   short: 'Itokiana Rajohnson',
   title: 'Développeur full-stack Java · Profil technico-fonctionnel',
   city: 'Antananarivo, Madagascar',
-  phones: ['+261 38 61 391 66'],
+  phones: priv.phones,
   email: 'rajohnsonitokiana@gmail.com',
   linkedin: 'LinkedIn : Itokiana Rajohnson',
   site: 'itokianara.github.io',
